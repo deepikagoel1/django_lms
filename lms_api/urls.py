@@ -20,4 +20,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('main.urls')),   #Path would be "http://127.0.0.1:8000/api/teacher/" on the browser.
+    path('api-auth/', include('rest_framework.urls'))
 ]
