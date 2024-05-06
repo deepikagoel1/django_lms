@@ -42,7 +42,7 @@ class Migration(migrations.Migration):
                 ('password', models.CharField(max_length=100)),
                 ('qualification', models.CharField(max_length=200)),
                 ('mobile_no', models.CharField(max_length=20)),
-                ('address', models.TextField()),
+                ('skills', models.TextField()),
             ],
         ),
         migrations.CreateModel(
