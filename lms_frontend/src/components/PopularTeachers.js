@@ -1,7 +1,28 @@
 import {Link} from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
+const baseUrl = "http://127.0.0.1:8000/api";
 
 function PopularTeachers(){
+    const [teacher, setTeacher] = useState('')
+    useEffect(()=>{
+        const response = axios.get(baseUrl + '/teacher/',{
+            headers: {
+                allowedHeaders: ['Content-Type', 'Authorization'],
+                token : '547bfe5c66741f3bd44e41ffa701c45ab09b8d3e',
+                'Access-Control-Allow-Origin' : '*',
+                 methods: ['GET', 'POST', 'PUT', 'DELETE'],
+                'Access-Control-Allow-Headers' : 'Origin, X-Requested-With,Content-Type, Accept'
+            },
+        }).then((response)=>{
+            
+            console.log(response.data);
+        }).catch(err=>{
+            console.log(err);
+        });
+       
+    },[]);
     return(
         <div className='container mt-3'>
         {/* Latest Courses */}
