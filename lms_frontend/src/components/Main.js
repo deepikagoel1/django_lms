@@ -32,6 +32,7 @@ import TeacherCourses from './teacher/TeacherCourses';
 import AddCourses from './teacher/AddCourses';
 import TeacherChangePassword from './teacher/TeacherChangePassword';
 import MyUsers from './teacher/MyUsers';
+import TeacherLogout from './teacher/TeacherLogout';
 
 function Main() {
   return (
@@ -67,7 +68,7 @@ function Main() {
         <Route path = "/teacher-add-course" element = {<AddCourses />} />
         <Route path = "/teacher-change-password" element = {<TeacherChangePassword />} />
         <Route path = "/teacher-myusers" element = {<MyUsers />} />
-
+        <Route path = "/teacher-logout" element = {<TeacherLogout />} />
 
       </Switch>
       <Footer />
