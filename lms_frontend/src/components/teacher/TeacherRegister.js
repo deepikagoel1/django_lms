@@ -34,7 +34,7 @@ function TeacherRegister()
     
     //Submit Form Function Creation
     const submitForm=()=>{
-        const teacherFormData = new FormData();
+        const teacherFormData = new FormData;
         //Creating the list
         teacherFormData.append("full_name", teacherData.full_name)
         teacherFormData.append("email", teacherData.email)
@@ -54,8 +54,7 @@ function TeacherRegister()
                     "skills" : '',
                     "mobile_no" : '',
                     "status" : "success"
-                    // ...teacherData,
-                    // 'status' : 'success'
+                  
                     
                 });
                 
@@ -73,18 +72,23 @@ function TeacherRegister()
     };
 
     useEffect(() => {
-        console.log(teacherData);
+        // console.log(teacherData);
         document.title = "Teacher Register";
     });
 
+    const teacherLoginStatus=localStorage.getItem('teacherLoginStatus')
+    if(teacherLoginStatus==='true'){
+        window.location.href = '/teacher-dashboard';
+    }
+    
     return(
         
         <div className="container mt-4">
             <div className="row">
                 <div className='col-6 offset-3'>
                     
-                    {teacherData.status==="success" && <p class='text-success'> Thankyou for Registering as Teacher!!!! </p>}
-                    {teacherData.status==="error"  && <p class='text-danger'> Something wrong happened!!!! </p>}
+                    {teacherData.status==="success" && <p className='text-success'> Thankyou for Registering as Teacher!!!! </p>}
+                    {teacherData.status==="error"  && <p className='text-danger'> Something wrong happened!!!! </p>}
                     
                     <div className='card'>               
                 <h3 className='card-header'>Teacher Registration</h3>
@@ -118,7 +122,7 @@ function TeacherRegister()
                                 PHP, Python, Javascript, AI
                             </div>
                         </div>
-                        <button onClick={submitForm} type="submit" className="btn btn-primary">Register</button>
+                        <button onClick={submitForm} type="button" className="btn btn-primary">Register</button>
                 </form>
                 
                 </div>

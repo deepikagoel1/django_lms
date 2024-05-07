@@ -20,33 +20,41 @@ function TeacherLogin()
     }
 
     const submitForm=()=>{
-        console.log(teacherLoginData);
-        // const teacherFormData = new FormData();
-        // teacherFormData.append("email", teacherLoginData.email)
-        // teacherFormData.append("password", teacherLoginData.password)
-        // try{
-        //         //sending the data on the Django Framework in the Json format.
-        //         axios.post(baseUrl + '/teacher-login/', teacherFormData).then((response)=>{
-        //             console.log('Form data submitted successfully:',response.data);
-        //             setteacherLoginData({
-        //                 "email" : '',
-        //                 "password" : '',
+        // console.log(teacherLoginData);
+        const teacherFormData = new FormData;
+        teacherFormData.append("email", teacherLoginData.email)
+        teacherFormData.append("password", teacherLoginData.password)
+        try{
+                //sending the data on the Django Framework in the Json format.
+                axios.post(baseUrl + '/teacher-login/', teacherFormData).then((response)=>{
+                    // console.log('Form data submitted successfully:',response.data);
+                    // setteacherLoginData({
+                    //     "email" : '',
+                    //     "password" : '',
                                     
-        //             });
+                    // });
+                    if(response.data.bool === true){
+                        localStorage.setItem('teacherLoginStatus', true);
+                        window.location.href = '/teacher-dashboard';
+                    }
                     
-        //         });
-        //     }
-        //     catch(error){
-        //         console.log('Error submitting form data:',error);
-        //         // setteacherData({
-        //         //     ...teacherData,
-        //         //     'status' : 'error'
+                });
+            }
+            catch(error){
+                console.log('Error submitting form data:',error);
+                // setteacherData({
+                //     ...teacherData,
+                //     'status' : 'error'
                     
-        //         // });
-        //     };
+                // });
+            };
 
     }
 
+    const teacherLoginStatus=localStorage.getItem('teacherLoginStatus')
+    if(teacherLoginStatus==='true'){
+        window.location.href = '/teacher-dashboard';
+    }
 
     useEffect(() => {
         document.title = 'Teacher login'
@@ -72,7 +80,7 @@ function TeacherLogin()
                             <input type="checkbox" className="form-check-input" id="exampleCheck1"/>
                             <label className="form-check-label" htmlFor="exampleCheck1">Remember Me</label>
                         </div> */}
-                        <button onClick={submitForm} type="submit" className="btn btn-primary">Login</button>
+                        <button onClick={submitForm} type="button" className="btn btn-primary">Login</button>
                  </form>
                 
                 </div>
