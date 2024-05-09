@@ -33,6 +33,9 @@ class CourseCategory(models.Model):
 
     class Meta:
         verbose_name_plural = "3. Course Categories" # Since on admin panel, model name appear as "Course categorys" so to change it we have to define class "Meta".
+    
+    def __str__(self):
+        return self.title
 
 ## Creating Course Model
 class Course(models.Model): 
@@ -40,6 +43,8 @@ class Course(models.Model):
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE) # This course belongs to one of the teacher.
     title = models.CharField(max_length=150)
     description = models.TextField()
+    feature_img = models.ImageField(upload_to ="course_imgs/", null=True)
+    techs = models.TextField(null=True)
     class Meta:
         verbose_name_plural = "4. Course"
 
@@ -54,3 +59,12 @@ class Student(models.Model):
 
     class Meta:
         verbose_name_plural = "2. Student"
+
+class Chapter(models.Model): 
+    course = models.ForeignKey(Course, on_delete=models.CASCADE) # This model is created to delete the course category on deletion of the courses.
+    title = models.CharField(max_length=150)
+    description = models.TextField()
+    video = models.FileField(upload_to ="chapter_videos/", null=True)
+    remarks = models.TextField(null=True)
+    class Meta:
+        verbose_name_plural = "5. Chapter"

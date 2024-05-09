@@ -35,6 +35,7 @@ function TeacherLogin()
                     // });
                     if(response.data.bool === true){
                         localStorage.setItem('teacherLoginStatus', true);
+                        localStorage.setItem('teacherId', response.data.teacher_id);
                         window.location.href = '/teacher-dashboard';
                     }
                     
@@ -51,7 +52,7 @@ function TeacherLogin()
 
     }
 
-    const teacherLoginStatus=localStorage.getItem('teacherLoginStatus')
+    const teacherLoginStatus=localStorage.getItem('teacherLoginStatus');
     if(teacherLoginStatus==='true'){
         window.location.href = '/teacher-dashboard';
     }
