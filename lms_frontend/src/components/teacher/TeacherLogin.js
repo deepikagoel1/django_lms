@@ -10,6 +10,8 @@ function TeacherLogin()
         password : ''
     });
 
+    const [errorMsgs, seterrorMsgs] = useState('');
+
     const handleChange=(event) =>{
         // console.log(event.target.name, event.target.value)
         
@@ -38,7 +40,9 @@ function TeacherLogin()
                         localStorage.setItem('teacherId', response.data.teacher_id);
                         window.location.href = '/teacher-dashboard';
                     }
-                    
+                    else{
+                        seterrorMsgs('You had entered Invalid Email or Password!!!! Please check again!!!')
+                    }
                 });
             }
             catch(error){
@@ -68,6 +72,7 @@ function TeacherLogin()
                     <div className='card'>               
                 <h3 className='card-header'>Teacher Login</h3>
                 <div className='card-body'>
+                    {errorMsgs && <p className='text-danger'> {errorMsgs} </p>}
                 <form>
                         <div className="mb-3">
                             <label htmlFor="exampleInputEmail1" className="form-label">Email</label>

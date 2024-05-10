@@ -32,7 +32,10 @@ class TeacherDetail(generics.RetrieveUpdateDestroyAPIView):
 def teacher_login(request):
     email = request.POST.get('email')
     password = request.POST.get('password')
-    teacherData = models.Teacher.objects.filter(email = email, password = password).first()
+    try:
+        teacherData = models.Teacher.objects.filter(email = email, password = password).first()
+    except models.Teacher.DoesnotExist: 
+        teacherData = None
     if teacherData:
         return JsonResponse({'bool': True, 'teacher_id':teacherData.id})
     else:
@@ -64,3 +67,17 @@ class ChapterList(generics.ListCreateAPIView):
     queryset = models.Chapter.objects.all()
     serializer_class = ChapterSerializer
     # permission_classes = [permissions.IsAuthenticated]
+
+class CourseChapterList(generics.ListAPIView):
+    # queryset = models.CourseChapter.objects.all()
+    serializer_class = ChapterSerializer
+    # permission_classes = [permissions.IsAuthenticated]
+    def get_queryset(self):
+        course_id = self.kwargs['course_id']
+        course = models.Course.objects.get(pk=course_id)
+        return models.Chapter.objects.filter(course=course)
+
+class ChapterDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.Chapter.objects.all()
+    serializer_class = ChapterSerializer
+

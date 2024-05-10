@@ -34,6 +34,10 @@ import TeacherChangePassword from './teacher/TeacherChangePassword';
 import MyUsers from './teacher/MyUsers';
 import TeacherLogout from './teacher/TeacherLogout';
 import AddChapter from './teacher/AddChapter';
+import CourseChapter from './teacher/CourseChapter';
+import EditChapter from './teacher/EditChapter';
+import DeleteChapter from './teacher/DeleteChapter';
+
 
 function Main() {
   return (
@@ -44,33 +48,36 @@ function Main() {
         <Route path = "/" element = {<Home />} />
         {/* <Route path = "/about" element = {<About />} /> */}
         <Route path = "/teacher-details/:teacher_id" element = {<TeacherDetails />} />
-        <Route path = "/all-courses" element = {<AllCourses />} />
-        <Route path = "/popular-courses" element = {<PopularCourses />} />
-        <Route path = "/popular-teachers" element = {<PopularTeachers />} />
-        <Route path = "/category-courses/:category_slug" element = {<CategoryCourses />} />
+        <Route path = "/all-courses/" element = {<AllCourses />} />
+        <Route path = "/popular-courses/" element = {<PopularCourses />} />
+        <Route path = "/popular-teachers/" element = {<PopularTeachers />} />
+        <Route path = "/category-courses/:category_slug/" element = {<CategoryCourses />} />
 
         {/* Student Dashboard Links */}
-        <Route path = "/detail/:course_id" element = {<CourseDetail />} />
-        <Route path = "/student-login" element = {<Login />} />
-        <Route path = "/student-register" element = {<Register />} />
-        <Route path = "/student_dashboard" element = {<Dashboard />} />
-        <Route path = "/my-courses" element = {<MyCourses />} />
-        <Route path = "/favorite-courses" element = {<FavoriteCourses />} />
-        <Route path = "/recommended-courses" element = {<RecommendedCourses />} />
-        <Route path = "/profile-setting" element = {<ProfileSetting />} />
-        <Route path = "/change-password" element = {<ChangePassword />} />
+        <Route path = "/detail/:course_id/" element = {<CourseDetail />} />
+        <Route path = "/student-login/" element = {<Login />} />
+        <Route path = "/student-register/" element = {<Register />} />
+        <Route path = "/student_dashboard/" element = {<Dashboard />} />
+        <Route path = "/my-courses/" element = {<MyCourses />} />
+        <Route path = "/favorite-courses/" element = {<FavoriteCourses />} />
+        <Route path = "/recommended-courses/" element = {<RecommendedCourses />} />
+        <Route path = "/profile-setting/" element = {<ProfileSetting />} />
+        <Route path = "/change-password/" element = {<ChangePassword />} />
 
         {/* Teacher Dashboard Links */}
-        <Route path = "/teacher-login" element = {<TeacherLogin />} />
-        <Route path = "/teacher-dashboard" element = {<TeacherDashboard />} />
-        <Route path = "/teacher-register" element = {<TeacherRegister />} />
-        <Route path = "/teacher-profile-setting" element = {<TeacherProfileSetting />} />
-        <Route path = "/teacher-courses" element = {<TeacherCourses />} />
-        <Route path = "/teacher-add-course" element = {<AddCourses />} />
-        <Route path = "/teacher-change-password" element = {<TeacherChangePassword />} />
-        <Route path = "/teacher-myusers" element = {<MyUsers />} />
-        <Route path = "/teacher-logout" element = {<TeacherLogout />} />
-        <Route path = "/add-chapter/:course_id" element = {<AddChapter />} />
+        <Route path = "/teacher-login/" element = {<TeacherLogin />} />
+        <Route path = "/teacher-dashboard/" element = {<TeacherDashboard />} />
+        <Route path = "/teacher-register/" element = {<TeacherRegister />} />
+        <Route path = "/teacher-profile-setting/" element = {<TeacherProfileSetting />} />
+        <Route path = "/teacher-courses/" element = {<TeacherCourses />} />
+        <Route path = "/teacher-add-course/" element = {<AddCourses />} />
+        <Route path = "/teacher-change-password/" element = {<TeacherChangePassword />} />
+        <Route path = "/teacher-myusers/" element = {<MyUsers />} />
+        <Route path = "/teacher-logout/" element = {<TeacherLogout />} />
+        <Route path = "/add-chapter/:course_id/" element = {<AddChapter />} />
+        <Route path = "/all-chapters/:course_id" element = {<CourseChapter />} />
+        <Route path = "/edit-chapter/:chapter_id" element = {<EditChapter />} />
+        <Route path = "/delete-chapter/:chapter_id" element = {<DeleteChapter />} />
 
       </Switch>
       <Footer />

@@ -163,7 +163,7 @@ function AddCourses()
                                 <div className="mb-3 row">
                                     <label htmlFor="inputFile" className="col-sm-2 col-form-label active">Featured Image</label>
                                     <div className="col-sm-10">
-                                    <input type="file" onChange={handleFileChange} name="f_img" id="video" className="form-control" />
+                                    <input type="file" onChange={handleFileChange} name="f_img" id="file" className="form-control" />
                                     </div>
                                 </div>
                                 <div className="mb-3 row">

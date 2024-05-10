@@ -5,6 +5,7 @@ import axios from 'axios';
 
 const baseUrl = "http://localhost:8000/api";
 
+
 const teacherId =localStorage.getItem('teacherId');
 // console.log('teacher id', teacherId);
 
@@ -35,7 +36,6 @@ function TeacherCourses(){
 
     // console.log(courseData);
 
-
     return(
         <div className="container mt-4">
             <div className="row">
@@ -58,7 +58,7 @@ function TeacherCourses(){
                             <tbody>
                                 {courseData.map((course, index) =>
                                 <tr key={course.title}>
-                                <td>{course.title}</td>
+                                <td><Link to={"/all-chapters/"+ course.id}>{course.title}</Link></td>
                                 <td><img src = {course.feature_img} width="100" className="rounded" alt={course.title} /></td>
                                 <td><Link to="/">678</Link></td>
                                 <td>
