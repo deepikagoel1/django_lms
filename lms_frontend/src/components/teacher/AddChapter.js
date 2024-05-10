@@ -57,20 +57,23 @@ function AddChapter()
         _FormData.append('course', course_id);
         _FormData.append("title", chapterData.title);
         _FormData.append("description", chapterData.description);
-        _FormData.append("video", chapterData.video);
+        _FormData.append("video", chapterData.video, chapterData.video.name);
         _FormData.append('remarks', chapterData.remarks);
 
         try{
+                
                 //sending the data on the Django Framework in the Json format.
-                axios.post(baseUrl + '/chapter/' + chapter_id, _FormData,{
+                axios.post(baseUrl + '/chapter/', _FormData,{
+                    
                     headers : {
                         'Content-Type' : 'multipart/form-data' ,
                         // 'Authentication' : 'Token 547bfe5c66741f3bd44e41ffa701c45ab09b8d3e'
                         // "Access-Control-Allow-Origin" : "*",
                     }
                 }).then((res) =>{
-                    console.log(res.data);
-                    // window.location.href = "/add-chapter/"+{chapter_id};
+                    // console.log(res.data);
+                    window.location.href = "/add-chapter/"+{chapter_id};
+                    window.location.reload();
                 });
                    
             }

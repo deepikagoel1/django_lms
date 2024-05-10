@@ -15,6 +15,7 @@ function CourseChapter(){
     
     const[chapterData, setChapterData] = useState([]);
     const {course_id} = useParams();
+    const {chapter_id} = useParams();
     const[TotalResult, setTotalResult] = useState(0);
 
        
@@ -30,6 +31,7 @@ function CourseChapter(){
             setChapterData(response.data);
             setTotalResult(response.data.length);
             // console.log(response.data)
+            console.log("Chapter_id",chapter_id);
 
             // }               
             });
@@ -42,9 +44,10 @@ function CourseChapter(){
 
     const Swal = require('sweetalert2');
     //For deleting the chapter
-    const handleDeleteClick = () => {
+    const handleDeleteClick = (chapter_id) => {
+        
         Swal.fire({
-          title: 'Are you sure?',
+          title: 'Are you sure you want to delete this chapter?',
           text: 'You will not be able to recover this Chapter Video!',
           icon: 'info',
           type: 'warning',
@@ -53,12 +56,45 @@ function CourseChapter(){
           cancelButtonText: 'No, keep it'
         }).then((result) => {
           if (result.isConfirmed) {
-            Swal.fire(
-              'Deleted!',
-              'Your Chapter Video has been deleted.',
-              'success'
-            )
-          } else if (result.dismiss === Swal.DismissReason.cancel) {
+            try{
+                axios.delete(baseUrl + '/chapter/'+ chapter_id)
+                .then((res) => {
+                    // window.location.reload();
+                    Swal.fire(
+                        'Deleted!',
+                        'Your Chapter Video has been deleted.',
+                        'success'
+                      );
+                    try{
+                        //sending the data on the Django Framework in the Json format.
+                        //Fetching all courses when page loads
+                        axios.get(baseUrl + '/course-chapters/' + course_id).then((response)=>{
+                        
+                       
+                        setChapterData(response.data);
+                        setTotalResult(response.data.length);
+                        // console.log(response.data)
+            
+                        // }               
+                        });
+                    }
+                    catch(error){
+                        console.log('Error submitting form data:',error);
+                      
+                    }
+                });
+              
+            }
+            catch(error){
+                Swal.fire(
+                    'Error!',
+                    'Something is wrong while deleting your chapter!!',
+                    'error'
+                  );
+            }
+            
+          } 
+          else if (result.dismiss === Swal.DismissReason.cancel) {
             Swal.fire(
               'Cancelled',
               'Your Chapter Video is safe :)',
@@ -102,8 +138,8 @@ function CourseChapter(){
                             <td>{chapter.remarks}</td>
                             <td>
                                 <Link  to = {"/edit-chapter/" + chapter.id} className='btn btn-info text-white ms-2 mt-2'><i className="bi bi-pencil-square"></i></Link>
-                                <button onClick={handleDeleteClick} to = {"/delete-chapter/" + chapter.id}  className='btn btn-danger ms-2 mt-2'><i className="bi bi-trash3-fill"></i></button>
-                                <Link to ={"/add-chapter/" + course_id} className='btn btn-success mt-2'>Add Chapter</Link>
+                                <button onClick={() => handleDeleteClick (chapter.id)} to = {"/delete-chapter/" + chapter.id}  className='btn btn-danger ms-2 mt-2'><i className="bi bi-trash3-fill"></i></button>
+                                <Link to ={"/add-chapter/" + course_id} className='btn btn-success mt-2 ms-2'>Add Chapter</Link>
                             </td>
                             </tr>
                             )}

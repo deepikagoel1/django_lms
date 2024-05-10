@@ -36,7 +36,6 @@ import TeacherLogout from './teacher/TeacherLogout';
 import AddChapter from './teacher/AddChapter';
 import CourseChapter from './teacher/CourseChapter';
 import EditChapter from './teacher/EditChapter';
-import DeleteChapter from './teacher/DeleteChapter';
 
 
 function Main() {
@@ -77,7 +76,6 @@ function Main() {
         <Route path = "/add-chapter/:course_id/" element = {<AddChapter />} />
         <Route path = "/all-chapters/:course_id" element = {<CourseChapter />} />
         <Route path = "/edit-chapter/:chapter_id" element = {<EditChapter />} />
-        <Route path = "/delete-chapter/:chapter_id" element = {<DeleteChapter />} />
 
       </Switch>
       <Footer />
