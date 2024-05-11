@@ -54,7 +54,7 @@ class CourseList(generics.ListCreateAPIView):
     # permission_classes = [permissions.IsAuthenticated]
 
 #To show the courses which were added by a specific teacher so it will be TeacherCourseList.
-class TeacherCourseList(generics.ListAPIView):
+class TeacherCourseList(generics.ListCreateAPIView):
     # queryset = models.Course.objects.all()
     serializer_class = CourseSerializer
     # permission_classes = [permissions.IsAuthenticated]
@@ -81,3 +81,13 @@ class ChapterDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Chapter.objects.all()
     serializer_class = ChapterSerializer
 
+
+# TeacherCourseDetail will fetch the current Id data.
+class TeacherCourseDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.Course.objects.all()
+    serializer_class = CourseSerializer
+    # # permission_classes = [permissions.IsAuthenticated]
+    # def get_queryset(self):
+    #     teacher_id = self.kwargs['teacher_id']
+    #     teacher = models.Teacher.objects.get(pk=teacher_id)
+    #     return models.Course.objects.filter(teacher=teacher)

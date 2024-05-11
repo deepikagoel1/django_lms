@@ -107,13 +107,13 @@ function CourseChapter(){
 
     return(
         <div className="container mt-4">
-        <div className="row">
+        <div className="row">   
              <aside className='col-md-3'>
                 <TeacherSidebar />
              </aside>
              <section className='col-md-9'></section>
             <div className='card mt-4'>
-                <h5 className='card-header'>All Chapters ({TotalResult})</h5>
+                <h5 className='card-header'>All Chapters ({TotalResult}) <Link className='btn btn-sm btn-success float-end' to={"/add-chapter/"+course_id}>Add Chapter</Link></h5>
                 <div className='card-body'>
                     <table  className='table table-striped table-hover table-bordered border-primary table-default'>
                         <thead>
@@ -139,7 +139,7 @@ function CourseChapter(){
                             <td>
                                 <Link  to = {"/edit-chapter/" + chapter.id} className='btn btn-info text-white ms-2 mt-2'><i className="bi bi-pencil-square"></i></Link>
                                 <button onClick={() => handleDeleteClick (chapter.id)} to = {"/delete-chapter/" + chapter.id}  className='btn btn-danger ms-2 mt-2'><i className="bi bi-trash3-fill"></i></button>
-                                <Link to ={"/add-chapter/" + course_id} className='btn btn-success mt-2 ms-2'>Add Chapter</Link>
+                                {/* <Link to ={"/add-chapter/" + course_id} className='btn btn-success mt-2 ms-2'>Add Chapter</Link> */}
                             </td>
                             </tr>
                             )}

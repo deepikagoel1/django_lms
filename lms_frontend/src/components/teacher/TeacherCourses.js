@@ -63,6 +63,7 @@ function TeacherCourses(){
                                 <td><Link to="/">678</Link></td>
                                 <td>
                                     <button type="button" className='btn btn-danger btn-sm'>Delete</button>
+                                    <Link className='btn btn-info btn-sm ms-2' to ={"/edit-course/" + course.id}>Edit Course</Link>
                                     <Link className='btn btn-success btn-sm ms-2' to ={"/add-chapter/" + course.id}>Add Chapter</Link>
                                 </td>
                                 </tr>

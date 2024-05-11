@@ -36,7 +36,7 @@ import TeacherLogout from './teacher/TeacherLogout';
 import AddChapter from './teacher/AddChapter';
 import CourseChapter from './teacher/CourseChapter';
 import EditChapter from './teacher/EditChapter';
-
+import EditCourse from './teacher/EditCourse';
 
 function Main() {
   return (
@@ -76,6 +76,8 @@ function Main() {
         <Route path = "/add-chapter/:course_id/" element = {<AddChapter />} />
         <Route path = "/all-chapters/:course_id" element = {<CourseChapter />} />
         <Route path = "/edit-chapter/:chapter_id" element = {<EditChapter />} />
+        <Route path = "/edit-course/:course_id" element = {<EditCourse />} />
+
 
       </Switch>
       <Footer />
