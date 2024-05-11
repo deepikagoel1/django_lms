@@ -1,7 +1,38 @@
 import { useParams } from "react-router-dom";
 import {Link} from 'react-router-dom';
+import {useEffect, useState } from 'react';
+import axios from 'axios';
+
+const baseUrl = "http://localhost:8000/api";
+const siteUrl = "http://localhost:8000/";
+
+const teacherId =localStorage.getItem('teacherId');
+
 
 function TeacherDetails() {
+  
+  const[courseData, setCourseData] = useState([]);
+  const[teacherData, setTeacherData] = useState([]);
+  const {course_id} = useParams();
+  const {teacher_id} = useParams();
+       
+    useEffect(() =>{
+        try{
+            //sending the data on the Django Framework in the Json format.
+            //Fetching all courses when page loads
+            axios.get(baseUrl + '/teacher/' + teacher_id).then((response)=>{
+            console.log(response);
+            setTeacherData(response.data);
+            setCourseData(response.data.teacher_courses);
+            
+            });
+        }
+        catch(error){
+            console.log('Error submitting form data:',error);
+          
+        }
+    }, []);
+
   return (
     <div className="card mt-3">
       <div className="row g-0">
@@ -10,14 +41,11 @@ function TeacherDetails() {
         </div>
         <div className="col-md-8">
           <div className="card-body">
-            <h5 className="card-title">(Teacher Name)</h5>
+            <h5 className="card-title">{teacherData.full_name}</h5>
             <p className="card-text">
-              Using a combination of grid and utility classes, cards can be made
-              horizontal in a mobile-friendly and responsive way. In the example
-              below, we remove the grid gutters with .g-0 and use .col-md-*
-              classes to make the card horizontal at the md breakpoint. Further
-              adjustments may be needed depending on your card content.
+              {teacherData.bio}
             </p>
+            
             <p className="card-text">Skills: <Link to="/category-courses/1">PHP</Link>,  
             <Link to="/teacher-details/1">Python</Link>, <Link to="/teacher-details/1">Javascript</Link>
             </p>
@@ -28,14 +56,19 @@ function TeacherDetails() {
       </div>
       <div className="card mt-4">
         <div className="card-header">Course List</div>
+        
+        {courseData.map((course, index) =>
             <div className="list-group list-group-flush">
-                <Link to="/detail/1" className="list-group-item list-group-item-action">PHP Course 1</Link>
-                <Link to="/detail/1" className="list-group-item list-group-item-action">PHP Course 2</Link>
+            
+                <Link to={`/detail/${course.id}`} className="list-group-item list-group-item-action">{course.title}</Link>
+                {/* <Link to="/detail/1" className="list-group-item list-group-item-action">PHP Course 2</Link>
                 <Link to="/detail/1" className="list-group-item list-group-item-action">Python Course 1</Link>
                 <Link to="/detail/1" className="list-group-item list-group-item-action">Python Course 2</Link>
                 <Link to="/detail/1" className="list-group-item list-group-item-action">Javascript Course 1</Link>
-                <Link to="/detail/1" className="list-group-item list-group-item-action">Javascript Course 2</Link>
+                <Link to="/detail/1" className="list-group-item list-group-item-action">Javascript Course 2</Link> */}
+            
             </div>
+        )}
           
         
     </div>

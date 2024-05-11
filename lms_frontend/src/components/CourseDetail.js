@@ -55,12 +55,13 @@ function CourseDetail() {
             </p>
             <p className="card-text">
               <small className="text-muted">
-                Course By: <Link to="/teacher-details/1">{teacherData.full_name}</Link>
+                Course By: <Link to={`/teacher-details/${teacherData.id}`}>{teacherData.full_name}</Link>
+              {/* Teacher data is returning id as the primary key. */}
               </small>
             </p>
             <p className="card-text">
               <small className="text-muted">
-                Technologies: <Link to="/teacher-details/1">{courseData.techs}</Link>
+                Technologies: <Link to={`/teacher-details/${teacherData.pk}`}>{courseData.techs}</Link>
               </small>
             </p>
             <p className="card-text">

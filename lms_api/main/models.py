@@ -21,6 +21,7 @@ class Teacher(models.Model):
     qualification = models.CharField(max_length=200)
     mobile_no = models.CharField(max_length=20)
     skills = models.TextField()
+    bio = models.TextField(null=True)
 
     class Meta:
         verbose_name_plural = "1. Teacher"
@@ -40,7 +41,7 @@ class CourseCategory(models.Model):
 ## Creating Course Model
 class Course(models.Model): 
     category = models.ForeignKey(CourseCategory, on_delete=models.CASCADE) # This model is created to delete the course category on deletion of the courses.
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE) # This course belongs to one of the teacher.
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='teacher_courses') # This course belongs to one of the teacher.
     title = models.CharField(max_length=150)
     description = models.TextField()
     feature_img = models.ImageField(upload_to ="course_imgs/", null=True)
