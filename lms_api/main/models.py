@@ -61,7 +61,7 @@ class Student(models.Model):
         verbose_name_plural = "2. Student"
 
 class Chapter(models.Model): 
-    course = models.ForeignKey(Course, on_delete=models.CASCADE) # This model is created to delete the course category on deletion of the courses.
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='course_chapters') # This model is created to delete the course category on deletion of the courses.
     title = models.CharField(max_length=150)
     description = models.TextField()
     video = models.FileField(upload_to ="chapter_videos/", null=True)

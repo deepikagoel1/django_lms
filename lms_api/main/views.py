@@ -52,7 +52,13 @@ class CourseList(generics.ListCreateAPIView):
     queryset = models.Course.objects.all()
     serializer_class = CourseSerializer
     # permission_classes = [permissions.IsAuthenticated]
-
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if 'result' in self.request.GET:
+            limit = int(self.request.GET['result'])
+            qs = models.Course.objects.all().order_by('-id')[:limit]
+        return qs
+    
 #To show the courses which were added by a specific teacher so it will be TeacherCourseList.
 class TeacherCourseList(generics.ListCreateAPIView):
     # queryset = models.Course.objects.all()
@@ -91,3 +97,6 @@ class TeacherCourseDetail(generics.RetrieveUpdateDestroyAPIView):
     #     teacher_id = self.kwargs['teacher_id']
     #     teacher = models.Teacher.objects.get(pk=teacher_id)
     #     return models.Course.objects.filter(teacher=teacher)
+class CourseDetailView(generics.RetrieveAPIView):
+    queryset = models.Course.objects.all()
+    serializer_class = CourseSerializer

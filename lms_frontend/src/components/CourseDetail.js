@@ -1,30 +1,57 @@
 import { useParams } from "react-router-dom";
 import {Link} from 'react-router-dom';
+import {useEffect, useState } from 'react';
+import axios from 'axios';
 
+const baseUrl = "http://localhost:8000/api";
 
 function CourseDetail() {
-  let { course_id } = useParams();
-  let { teacher_id } = useParams();
+
+  const[chapterData, setChapterData] = useState([]);
+  const[courseData, setCourseData] = useState([]);
+  const[teacherData, setTeacherData] = useState([]);
+  const {course_id} = useParams();
+  const teacherId =localStorage.getItem('teacherId');
+
+  const {chapter_id} = useParams();
+
+  useEffect(() =>{
+    try{
+        //sending the data on the Django Framework in the Json format.
+        //Fetching all courses when page loads
+        axios.get(baseUrl + '/course/' + course_id).then((response)=>{
+        
+        setCourseData(response.data);
+        setChapterData(response.data.course_chapters);
+        setTeacherData(response.data.teacher);
+        // console.log(response.data)
+        });
+    }
+    catch(error){
+        console.log('Error submitting form data:',error);
+      
+    }
+
+
+}, []);
+
+
 
   return (
     <div className="card text-right">
       <div className="row g-0">
         <div className="col-md-4">
-          <img src="/logo512.png" className="img-fluid img-thumbnail" alt="Course Image"/>
+          <img src={courseData.feature_img} className="img-fluid img-thumbnail" alt="Course Image"/>
         </div>
         <div className="col-md-8">
           <div className="card-body">
-            <h5 className="card-title">Course Title</h5>
+            <h5 className="card-title">{courseData.title}</h5>
             <p className="card-text">
-              Using a combination of grid and utility classes, cards can be made
-              horizontal in a mobile-friendly and responsive way. In the example
-              below, we remove the grid gutters with .g-0 and use .col-md-*
-              classes to make the card horizontal at the md breakpoint. Further
-              adjustments may be needed depending on your card content.
+              {courseData.description}
             </p>
             <p className="card-text">
               <small className="text-muted">
-                Course By: <Link to="/teacher-details/1">Teacher 1</Link>
+                Course By: <Link to="/teacher-details/1">{teacherData.full_name}</Link>
               </small>
             </p>
             <p className="card-text">
@@ -45,7 +72,8 @@ function CourseDetail() {
       <div className="card mt-4 offset-0">
         <div className="card-header">Course Videos</div>
         <ul className="list-group list-group-flush">
-          <li className="list-group-item">Introduction
+          {chapterData.map((chapter, index) =>
+          <li className="list-group-item">{chapter.title}
           <span className="float-end">
             <span className="me-3">1 hr 30 mins</span>
                 <button className="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#videoModal1"> <i className="bi-youtube"></i></button>
@@ -55,12 +83,12 @@ function CourseDetail() {
               <div className="modal-dialog modal-xl">
                 <div className="modal-content">
                   <div className="modal-header">
-                    <h5 className="modal-title" id="exampleModalLabel">Video 1</h5>
+                    <h5 className="modal-title" id="exampleModalLabel">{chapter.title}</h5>
                     <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div className="modal-body">
                   <div className="ratio ratio-16x9">
-                      <iframe src="https://www.youtube.com/embed/zpOULjyy-n8?rel=0" title="YouTube video" allowfullscreen></iframe>
+                      <iframe src={chapter.video} title={chapter.title} allowfullscreen></iframe>
                   </div>
                   </div>
                   
@@ -68,25 +96,9 @@ function CourseDetail() {
               </div>
             </div>
             {/* <!--Ending Video Modal --> */}
-          </li>
-          <li className="list-group-item">Introduction
-          <span className="float-end">
-            <span className="me-3">1 hr 30 mins</span>
-                <button className="btn btn-sm btn-danger"> <i className="bi-youtube"></i></button>
-            </span>
-          </li>
-          <li className="list-group-item">Introduction
-          <span className="float-end">
-            <span className="me-3">1 hr 30 mins</span>
-                <button className="btn btn-sm btn-danger"> <i className="bi-youtube"></i></button>
-            </span>
-          </li>
-          <li className="list-group-item">Introduction
-          <span className="float-end">
-            <span className="me-3">1 hr 30 mins</span>
-                <button className="btn btn-sm btn-danger"> <i className="bi-youtube"></i></button>
-            </span>
-          </li>
+          </li> 
+
+          )} 
         </ul>
       </div>
       {/* End Course Video */}
