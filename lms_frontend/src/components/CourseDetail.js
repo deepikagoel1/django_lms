@@ -4,12 +4,15 @@ import {useEffect, useState } from 'react';
 import axios from 'axios';
 
 const baseUrl = "http://localhost:8000/api";
+const siteUrl = "http://localhost:8000/";
 
 function CourseDetail() {
 
   const[chapterData, setChapterData] = useState([]);
   const[courseData, setCourseData] = useState([]);
   const[teacherData, setTeacherData] = useState([]);
+  const[relatedCourseData, setrelatedCourseData] = useState([]);
+
   const {course_id} = useParams();
   const teacherId =localStorage.getItem('teacherId');
 
@@ -24,6 +27,7 @@ function CourseDetail() {
         setCourseData(response.data);
         setChapterData(response.data.course_chapters);
         setTeacherData(response.data.teacher);
+        setrelatedCourseData(JSON.parse(response.data.related_videos));
         // console.log(response.data)
         });
     }
@@ -35,7 +39,7 @@ function CourseDetail() {
 
 }, []);
 
-
+  // console.log(relatedCourseData);
 
   return (
     <div className="card text-right">
@@ -56,6 +60,11 @@ function CourseDetail() {
             </p>
             <p className="card-text">
               <small className="text-muted">
+                Technologies: <Link to="/teacher-details/1">{courseData.techs}</Link>
+              </small>
+            </p>
+            <p className="card-text">
+              <small className="text-muted">
                 Duration (in hours): 3 hrs 30 minutes
               </small>
             </p>
@@ -70,7 +79,7 @@ function CourseDetail() {
       </div>
       {/*Course Video */}
       <div className="card mt-4 offset-0">
-        <div className="card-header">Course Videos</div>
+        <div className="card-header">Content Videos</div>
         <ul className="list-group list-group-flush">
           {chapterData.map((chapter, index) =>
           <li className="list-group-item">{chapter.title}
@@ -79,7 +88,7 @@ function CourseDetail() {
                 <button className="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#videoModal1"> <i className="bi-youtube"></i></button>
             </span>
             {/* <!--Starting Video Modal --> */}
-            <div className="modal fade" id="videoModal1" tabindex="0" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div className="modal fade" id="videoModal1" tabIndex="1" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div className="modal-dialog modal-xl">
                 <div className="modal-content">
                   <div className="modal-header">
@@ -88,7 +97,7 @@ function CourseDetail() {
                   </div>
                   <div className="modal-body">
                   <div className="ratio ratio-16x9">
-                      <iframe src={chapter.video} title={chapter.title} allowfullscreen></iframe>
+                      <iframe src={chapter.video} title={chapter.title} allowFullScreen></iframe>
                   </div>
                   </div>
                   
@@ -106,62 +115,23 @@ function CourseDetail() {
       <h3 className="pb-1 mb-4 mt-5"> Related Courses <a href="#" className="float-end">See All </a>
       </h3>
       <div className="row mb-4">
+      {relatedCourseData.map((rcourse, index) =>
         <div className="col-md-3">
           <div className="card" style={{ width: "18rem", fontSize: "20px", padding: "20px", backgroundColor: "light", color: "white",}}>
-            <a href="#">
-              <img src="/logo512.png" className="card-img-top" alt="..." />
-            </a>
+            <Link target="__blank" to={`/detail/${rcourse.pk}`}>
+            <img src={`${siteUrl}media/${rcourse.fields.feature_img}`} className="img-fluid img-thumbnail" alt={rcourse.fields.title}/>
+            {/* Since we have related_videos as indirect linked with the chapters so we have to fetch the media path correctly and from first level which is course. */}
+            </Link>
             <div className="card-body">
               <h5 className="card-title">
-                <Link to="/detail/1">Course Title</Link>
+                <Link target="__blank" to={`/detail/${rcourse.pk}`}>{rcourse.fields.title}</Link>
+                {/* For new tab we have created the target as __blank */}
               </h5>
             </div>
           </div>
         </div>
+      )}
 
-        <div className="col-md-3">
-          <div
-            className="card"
-            style={{
-              width: "18rem",
-              fontSize: "20px",
-              padding: "20px",
-              backgroundColor: "light",
-              color: "white",
-            }}
-          >
-            <a href="#">
-              <img src="/logo512.png" className="card-img-top" alt="..." />
-            </a>
-            <div className="card-body">
-              <h5 className="card-title">
-                <a href="#">Course Title</a>
-              </h5>
-            </div>
-          </div>
-        </div>
-
-        <div className="col-md-3">
-          <div
-            className="card"
-            style={{
-              width: "18rem",
-              fontSize: "20px",
-              padding: "20px",
-              backgroundColor: "light",
-              color: "white",
-            }}
-          >
-            <a href="#">
-              <img src="/logo512.png" className="card-img-top" alt="..." />
-            </a>
-            <div className="card-body">
-              <h5 className="card-title">
-                <a href="#">Course Title</a>
-              </h5>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );

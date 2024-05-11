@@ -3,7 +3,7 @@ from django.conf import settings
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from rest_framework.authtoken.models import Token
-
+from django.core import serializers
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
@@ -47,6 +47,9 @@ class Course(models.Model):
     techs = models.TextField(null=True)
     class Meta:
         verbose_name_plural = "4. Course"
+    def related_videos(self):
+        related_videos = Course.objects.filter(techs__icontains=self.techs)
+        return serializers.serialize('json', related_videos)
 
 class Student(models.Model):
     full_name = models.CharField(max_length=100)
