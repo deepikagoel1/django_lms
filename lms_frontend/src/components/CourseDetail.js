@@ -12,8 +12,11 @@ function CourseDetail() {
   const[courseData, setCourseData] = useState([]);
   const[teacherData, setTeacherData] = useState([]);
   const[relatedCourseData, setrelatedCourseData] = useState([]);
+  const[techListData, setTechListData] = useState([]);
 
-  const {course_id} = useParams();
+  const {course_id} = useParams(); 
+  //let is used for the blog.
+  //const is used for whole of the document.
   const teacherId =localStorage.getItem('teacherId');
 
   const {chapter_id} = useParams();
@@ -28,6 +31,7 @@ function CourseDetail() {
         setChapterData(response.data.course_chapters);
         setTeacherData(response.data.teacher);
         setrelatedCourseData(JSON.parse(response.data.related_videos));
+        setTechListData(response.data.tech_list);
         // console.log(response.data)
         });
     }
@@ -61,7 +65,11 @@ function CourseDetail() {
             </p>
             <p className="card-text">
               <small className="text-muted">
-                Technologies: <Link to={`/teacher-details/${teacherData.pk}`}>{courseData.techs}</Link>
+                Technologies:&nbsp;
+                {techListData.map((tech, index) => 
+                      <Link to={`/category-courses/${tech.trim()}`} className="badge badge-pill text-dark bg-info ms-2 mr-2">{tech}</Link>
+                )}
+                 
               </small>
             </p>
             <p className="card-text">

@@ -26,6 +26,10 @@ class Teacher(models.Model):
     class Meta:
         verbose_name_plural = "1. Teacher"
 
+    def skills_list(self):
+        skills_list = self.skills.split(",")
+        return skills_list
+
 ## Creating Course Category Model
 
 class CourseCategory(models.Model):
@@ -51,6 +55,9 @@ class Course(models.Model):
     def related_videos(self):
         related_videos = Course.objects.filter(techs__icontains=self.techs)
         return serializers.serialize('json', related_videos)
+    def tech_list(self):
+        tech_list = self.techs.split(",")
+        return tech_list
 
 class Student(models.Model):
     full_name = models.CharField(max_length=100)
@@ -58,7 +65,6 @@ class Student(models.Model):
     password = models.CharField(max_length=100)
     qualification = models.CharField(max_length=200)
     mobile_no = models.CharField(max_length=20)
-    address = models.TextField()
     interested_categories = models.TextField()
 
     class Meta:

@@ -13,6 +13,7 @@ function TeacherDetails() {
   
   const[courseData, setCourseData] = useState([]);
   const[teacherData, setTeacherData] = useState([]);
+  const[skillsData, setSkillsData] = useState([]);
   const {course_id} = useParams();
   const {teacher_id} = useParams();
        
@@ -24,6 +25,7 @@ function TeacherDetails() {
             console.log(response);
             setTeacherData(response.data);
             setCourseData(response.data.teacher_courses);
+            setSkillsData(response.data.skills_list);
             
             });
         }
@@ -46,8 +48,14 @@ function TeacherDetails() {
               {teacherData.bio}
             </p>
             
-            <p className="card-text">Skills: <Link to="/category-courses/1">PHP</Link>,  
-            <Link to="/teacher-details/1">Python</Link>, <Link to="/teacher-details/1">Javascript</Link>
+            <p className="card-text">Skills:&nbsp; 
+            {skillsData && skillsData.map((skills, index) =>
+            <Link to={`/teacher-skill-courses/${skills.trim()}/${teacherData.id}`} key={index} className="badge badge-pill text-dark bg-info ms-2 mr-2">{skills.trim()}</Link>,  
+            
+            // <Link to="/teacher-details/1">Python</Link>, 
+            
+            // <Link to="/teacher-details/1">Javascript</Link>
+            )}
             </p>
             <p className="card-text">Recent Course: <Link to="/teacher-details/1">ReactJS Course</Link></p>
             <p className="card-text">Rating: 4.5/5</p>

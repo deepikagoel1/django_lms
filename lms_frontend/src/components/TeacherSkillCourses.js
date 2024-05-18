@@ -5,15 +5,15 @@ import { useParams } from "react-router-dom";
 
 const baseUrl = "http://localhost:8000/api";
 
-function CategoryCourses(){
+function TeacherSkillCourses(){
     const[courseData, setCourseData] = useState([]);
-    const {category_slug} = useParams();
+    const {skill_name, teacher_id} = useParams();
 
     useEffect(() =>{
         try{
             //sending the data on the Django Framework in the Json format.
             //Fetching all courses when page loads
-            axios.get(baseUrl + '/course/?category=' + category_slug).then((response)=>{
+            axios.get(baseUrl + '/course/?skill_name=' + skill_name + '&teacher=' + teacher_id).then((response)=>{
            
             setCourseData(response.data);
                           
@@ -28,7 +28,7 @@ function CategoryCourses(){
     return(
         <div className='container mt-3'>
         {/* Latest Courses */}
-        <h3 className="pb-1 mb-4"> {category_slug}</h3> 
+        <h3 className="pb-1 mb-4"> {skill_name.trim()}</h3> 
         <div className="row mb-4" >
         {courseData && courseData.map((course, index) => 
             <div className="col-md-3 mb-4" key={index}>
@@ -71,4 +71,4 @@ function CategoryCourses(){
     );
 }
 
-export default CategoryCourses;
+export default TeacherSkillCourses;

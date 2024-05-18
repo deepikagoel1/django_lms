@@ -12,10 +12,12 @@ import AllCourses from './AllCourses';
 import PopularCourses from './PopularCourses';
 import PopularTeachers from './PopularTeachers';
 import CategoryCourses from './CategoryCourses';
+import TeacherSkillCourses from './TeacherSkillCourses';
+
 
 //Importing from User Module
 import Login from './User/Login';
-import Register from './User/Register';
+import StudentRegister from './User/StudentRegister';
 import Dashboard from './User/Dashboard';
 import MyCourses from './User/MyCourses';
 import FavoriteCourses from './User/FavoriteCourses';
@@ -38,6 +40,7 @@ import CourseChapter from './teacher/CourseChapter';
 import EditChapter from './teacher/EditChapter';
 import EditCourse from './teacher/EditCourse';
 
+
 function Main() {
   return (
     <div className="App">
@@ -55,7 +58,7 @@ function Main() {
         {/* Student Dashboard Links */}
         <Route path = "/detail/:course_id/" element = {<CourseDetail />} />
         <Route path = "/student-login/" element = {<Login />} />
-        <Route path = "/student-register/" element = {<Register />} />
+        <Route path = "/student-register/" element = {<StudentRegister />} />
         <Route path = "/student_dashboard/" element = {<Dashboard />} />
         <Route path = "/my-courses/" element = {<MyCourses />} />
         <Route path = "/favorite-courses/" element = {<FavoriteCourses />} />
@@ -77,7 +80,7 @@ function Main() {
         <Route path = "/all-chapters/:course_id" element = {<CourseChapter />} />
         <Route path = "/edit-chapter/:chapter_id" element = {<EditChapter />} />
         <Route path = "/edit-course/:course_id" element = {<EditCourse />} />
-
+        <Route path = "/teacher-skill-courses/:skill_name/:teacher_id" element = {<TeacherSkillCourses />} />
 
       </Switch>
       <Footer />

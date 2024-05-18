@@ -24,13 +24,16 @@ function Header() {
                   <a className="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Teachers</a>
                   <ul className="dropdown-menu"  aria-labelledby="navbarDropdown"> {teacherLoginStatus!='true' && 
                         <>
+                        {/* <li><a className="dropdown-item" href="/teacher-dashboard">Teacher Dashboard</a></li>
+                        <li><a className="dropdown-item" href="/teacher-logout">Teacher Logout</a></li>
                         <li><Link className="dropdown-item" to="/teacher-register">Teacher Register</Link></li>
-                        <li><Link className="dropdown-item" to="/teacher-login">Teacher Login</Link></li>
+                        <li><Link className="dropdown-item" to="/teacher-login">Teacher Login</Link></li> */}
                         {/* <li><hr className="dropdown-divider"/></li> */}
                         </>
                         }
-                        <li><a className="dropdown-item" href="/teacher-dashboard">Teacher Dashboard</a></li>
-                        <li><a className="dropdown-item" href="/teacher-logout">Teacher Logout</a></li>
+                        <li><Link className="dropdown-item" to="/teacher-register">Teacher Register</Link></li>
+                        <li><Link className="dropdown-item" to="/teacher-login">Teacher Login</Link></li>
+                        <li><Link className="dropdown-item" to="/teacher-logout">Teacher Logout</Link></li>
                     </ul>
                     </li>
                   <li className="nav-item dropdown">
