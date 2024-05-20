@@ -40,7 +40,7 @@ import AddChapter from './teacher/AddChapter';
 import CourseChapter from './teacher/CourseChapter';
 import EditChapter from './teacher/EditChapter';
 import EditCourse from './teacher/EditCourse';
-
+import EnrolledStudents from './teacher/EnrolledStudents';
 
 function Main() {
   return (
@@ -84,6 +84,7 @@ function Main() {
         <Route path = "/edit-chapter/:chapter_id" element = {<EditChapter />} />
         <Route path = "/edit-course/:course_id" element = {<EditCourse />} />
         <Route path = "/teacher-skill-courses/:skill_name/:teacher_id" element = {<TeacherSkillCourses />} />
+        <Route path = "/fetch-enrolled-students/:course_id" element = {<EnrolledStudents />} />
 
       </Switch>
       <Footer />

@@ -15,7 +15,6 @@ function CourseDetail() {
   const[techListData, setTechListData] = useState([]);
   const[userLoginStatus, setUserLoginStatus] = useState();
   const[EnrollState, setEnrollState] = useState();
-
   const {course_id} = useParams(); 
   //let is used for the blog.
   //const is used for whole of the document.
@@ -144,7 +143,10 @@ function CourseDetail() {
               </small>
             </p>
             <p className="card-text">
-              <small className="text-muted">Total Students Enrolled: 500</small>
+              <small className="text-muted">Total Students Enrolled: &nbsp;
+                      {courseData.total_enrolled_students} 
+                    
+              </small>
             </p>
             <p className="card-text">
               <small className="text-muted">Rating: 4.5/5</small>

@@ -15,7 +15,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Course
-        fields = ['id', 'category', 'teacher', 'title', 'description', 'feature_img', 'techs', 'course_chapters', 'related_videos', 'tech_list']
+        fields = ['id', 'category', 'teacher', 'title', 'description', 'feature_img', 'techs', 'course_chapters', 'related_videos', 'tech_list', 'total_enrolled_students']
         depth = 1 # It will fetch the Category related data and the teacher related data. Fetching the Level-1 details
         # But if we want to capture further more details related to the categories as well then we can define the depth value as 2 
         # or whatsoever since in our models.py file this Serializer is linked with category so we can define it as level 2 
@@ -38,3 +38,4 @@ class StudentEnrolledCourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.StudentCourseEnrollment
         fields = ['id', 'course', 'student', 'enrolled_time']
+        depth = 1

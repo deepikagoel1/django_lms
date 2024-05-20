@@ -60,7 +60,7 @@ function TeacherCourses(){
                                 <tr key={course.title}>
                                 <td><Link to={"/all-chapters/"+ course.id}>{course.title}</Link></td>
                                 <td><img src = {course.feature_img} width="100" className="rounded" alt={course.title} /></td>
-                                <td><Link to="/">678</Link></td>
+                                <td><Link to={'/fetch-enrolled-students/' + course.id + '/'}>{course.total_enrolled_students}</Link></td>
                                 <td>
                                     <button type="button" className='btn btn-danger btn-sm'>Delete</button>
                                     <Link className='btn btn-info btn-sm ms-2' to ={"/edit-course/" + course.id}>Edit Course</Link>
