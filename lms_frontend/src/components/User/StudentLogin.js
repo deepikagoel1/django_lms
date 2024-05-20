@@ -3,9 +3,9 @@ import {useEffect, useState } from 'react';
 import axios from 'axios';
 const baseUrl = "http://127.0.0.1:8000/api";
 
-function TeacherLogin()
+function StudentLogin()
 {
-    const [teacherLoginData, setteacherLoginData] = useState({
+    const [studentLoginData, setstudentLoginData] = useState({
         email : '',
         password : ''
     });
@@ -15,31 +15,30 @@ function TeacherLogin()
     const handleChange=(event) =>{
         // console.log(event.target.name, event.target.value)
         
-        setteacherLoginData({
-            ...teacherLoginData, //spread operator
-            [event.target.name]:event.target.value //key:value pair capturing through Teacher Registration page.
+        setstudentLoginData({
+            ...studentLoginData, //spread operator
+            [event.target.name]:event.target.value //key:value pair capturing through student Registration page.
         });
     }
 
     const submitForm=()=>{
-        // console.log(teacherLoginData);
-        const teacherFormData = new FormData;
-        teacherFormData.append("email", teacherLoginData.email)
-        teacherFormData.append("password", teacherLoginData.password)
+        // console.log(studentLoginData);
+        const studentFormData = new FormData;
+        studentFormData.append("email", studentLoginData.email)
+        studentFormData.append("password", studentLoginData.password)
         try{
                 //sending the data on the Django Framework in the Json format.
-                axios.post(baseUrl + '/teacher-login/', teacherFormData).then((response)=>{
+                axios.post(baseUrl + '/student-login/', studentFormData).then((response)=>{
                     // console.log('Form data submitted successfully:',response.data);
-                    // setteacherLoginData({
+                    // setstudentLoginData({
                     //     "email" : '',
                     //     "password" : '',
                                     
                     // });
                     if(response.data.bool === true){
-                        localStorage.setItem('teacherLoginStatus', true);
-                        localStorage.setItem('teacherId', response.data.teacher_id);
-                        window.location.href = '/teacher-dashboard';
-                        //On browser teacher login and teacherlOginstatus gets saved which we try to fetch.
+                        localStorage.setItem('studentLoginStatus', true);
+                        localStorage.setItem('studentId', response.data.student_id);
+                        window.location.href = '/student-dashboard';
                     }
                     else{
                         seterrorMsgs('You had entered Invalid Email or Password!!!! Please check again!!!')
@@ -48,8 +47,8 @@ function TeacherLogin()
             }
             catch(error){
                 console.log('Error submitting form data:',error);
-                // setteacherData({
-                //     ...teacherData,
+                // setstudentData({
+                //     ...studentData,
                 //     'status' : 'error'
                     
                 // });
@@ -57,13 +56,13 @@ function TeacherLogin()
 
     }
 
-    const teacherLoginStatus=localStorage.getItem('teacherLoginStatus');
-    if(teacherLoginStatus==='true'){
-        window.location.href = '/teacher-dashboard';
+    const studentLoginStatus=localStorage.getItem('studentLoginStatus');
+    if(studentLoginStatus==='true'){
+        window.location.href = '/student-dashboard';
     }
 
     useEffect(() => {
-        document.title = 'Teacher login'
+        document.title = 'student login'
     });
     return(
         
@@ -71,17 +70,17 @@ function TeacherLogin()
             <div className="row">
                 <div className='col-6 offset-3'>
                     <div className='card'>               
-                <h3 className='card-header'>Teacher Login</h3>
+                <h3 className='card-header'>Student Login</h3>
                 <div className='card-body'>
                     {errorMsgs && <p className='text-danger'> {errorMsgs} </p>}
-                {/* <form> BY default form works with the GET method */}
+                {/* <form> */}
                         <div className="mb-3">
                             <label htmlFor="exampleInputEmail1" className="form-label">Email</label>
-                            <input value={teacherLoginData.email} onChange={handleChange} name="email" type="email" className="form-control" />
+                            <input value={studentLoginData.email} onChange={handleChange} name="email" type="email" className="form-control" />
                         </div>
                         <div className="mb-3">
                             <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
-                            <input value={teacherLoginData.password} onChange={handleChange} name="password" type="password" className="form-control" id="exampleInputPassword1"/>
+                            <input value={studentLoginData.password} onChange={handleChange} name="password" type="password" className="form-control" id="exampleInputPassword1"/>
                         </div>
                         {/* <div className="mb-3 form-check">
                             <input type="checkbox" className="form-check-input" id="exampleCheck1"/>
@@ -91,11 +90,11 @@ function TeacherLogin()
                  {/* </form> */}
                 
                 </div>
-                </div>
-                </div>
             </div>
         </div>
+    </div>
+</div>
     )
 }
 
-export default TeacherLogin;
+export default StudentLogin;

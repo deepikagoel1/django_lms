@@ -2,7 +2,7 @@ from django.shortcuts import render
 # Create your views here.
 # We are going to use class based Views as we have to do the multiple things and not Function Based Views
 from rest_framework.views import APIView
-from .serializers import TeacherSerializer, CategorySerializer, CourseSerializer, ChapterSerializer, StudentSerializer
+from .serializers import TeacherSerializer, CategorySerializer, CourseSerializer, ChapterSerializer, StudentSerializer, StudentEnrolledCourseSerializer
 from . import models
 from rest_framework.response import Response
 from rest_framework import generics
@@ -126,7 +126,35 @@ class CourseDetailView(generics.RetrieveAPIView):
     serializer_class = CourseSerializer
 
 #ListCreateAPIView is used for Post and Get
-class StudentDetail(generics.ListCreateAPIView):
+class StudentList(generics.ListCreateAPIView):
     queryset = models.Student.objects.all()
     serializer_class = StudentSerializer
 
+@csrf_exempt
+def student_login(request):
+    email = request.POST.get('email')
+    password = request.POST.get('password')
+    try:
+        studentData = models.Student.objects.filter(email = email, password = password).first()
+    except models.student.DoesnotExist: 
+        studentData = None
+    if studentData:
+        return JsonResponse({'bool': True, 'student_id':studentData.id})
+    else:
+        return JsonResponse({'bool': False})
+    return render(request)
+
+class StudentEnrolledCourseList(generics.ListCreateAPIView):
+    queryset = models.StudentCourseEnrollment.objects.all()
+    serializer_class = StudentEnrolledCourseSerializer
+
+def fetch_enroll_status(request,course_id, student_id): 
+
+    student = models.Student.objects.filter(id = student_id).first()
+    course = models.Course.objects.filter(id = course_id).first()
+    EnrollState = models.StudentCourseEnrollment.objects.filter(course = course, student = student).count()
+    if EnrollState:
+        return JsonResponse({'bool': True})
+    else:
+        return JsonResponse({'bool': False})
+    return render(request)

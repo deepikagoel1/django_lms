@@ -80,8 +80,6 @@ function AddCourses()
 
         _FormData.append("category", courseData.category);
         _FormData.append("teacher", teacherId);
-        // _FormData.append("category", 1);
-        // _FormData.append("teacher", 1);
         _FormData.append("title", courseData.title);
         _FormData.append("description", courseData.description);
         _FormData.append("feature_img", courseData.f_img, courseData.f_img.name);

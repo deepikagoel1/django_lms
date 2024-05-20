@@ -13,11 +13,13 @@ function CourseDetail() {
   const[teacherData, setTeacherData] = useState([]);
   const[relatedCourseData, setrelatedCourseData] = useState([]);
   const[techListData, setTechListData] = useState([]);
+  const[userLoginStatus, setUserLoginStatus] = useState();
+  const[EnrollState, setEnrollState] = useState();
 
   const {course_id} = useParams(); 
   //let is used for the blog.
   //const is used for whole of the document.
-  const teacherId =localStorage.getItem('teacherId');
+  const studentId =localStorage.getItem('studentId');
 
   const {chapter_id} = useParams();
 
@@ -40,10 +42,74 @@ function CourseDetail() {
       
     }
 
+    // Fetching Enroll Status
+    try{
+      //sending the data on the Django Framework in the Json format.
+      //Fetching all courses when page loads
+      axios.get(baseUrl + '/fetch-enroll-status/' + course_id + '/'+ studentId).then((response)=>{
+        if (response.data.bool === true){
+            console.log(response)
+            setEnrollState('success')
+        }
+      // setEnrollState('success');
+      console.log(response.data)
+      });
+  }
+  catch(error){
+      console.log('Error submitting form data:',error);
+    
+  }
+
+    const studentLoginStatus=localStorage.getItem('studentLoginStatus');
+    if(studentLoginStatus==='true'){
+        setUserLoginStatus('success')
+    }
 
 }, []);
 
   // console.log(relatedCourseData);
+
+  const EnrollCourse = ()=>{
+        const _FormData = new FormData();
+        const Swal = require('sweetalert2');
+
+        _FormData.append("course", course_id);
+        _FormData.append("student", studentId);
+        try{
+          //sending the data on the Django Framework in the Json format.
+          axios.post(baseUrl + '/student-enroll-courses/', _FormData,{
+              headers : {
+                  'Content-Type' : 'multipart/form-data' ,
+                  "Access-Control-Allow-Origin" : "*"
+              }
+          }).then((res) =>{
+              console.log(res.data);
+              // window.location.href = "/teacher-add-course";
+              if(res.status === 200 || res.status === 201){
+              Swal.fire({
+                title: 'You have successfully enrolled in this Course!',
+                icon: 'success',
+                toast: true,
+                timer: 1000000,
+                type: 'success',
+                position: 'top-right'
+              });
+              
+              window.location.reload()
+            }
+          });
+             
+      }
+      catch(error){
+          console.log('Error submitting form data:',error);
+          // setteacherData({
+          //     ...teacherData,
+          //     'status' : 'error'
+              
+          // });
+      }
+
+  }
 
   return (
     <div className="card text-right">
@@ -83,6 +149,30 @@ function CourseDetail() {
             <p className="card-text">
               <small className="text-muted">Rating: 4.5/5</small>
             </p>
+            
+            {userLoginStatus === 'success' && EnrollState !== 'success' &&
+            <p>
+              <button onClick={EnrollCourse} type="button" className="btn btn-primary">
+                Enroll in this Course
+              </button> 
+            </p>
+              }
+
+              {EnrollState === 'success' && userLoginStatus === 'success' &&
+              <p>
+              <span className="badge badge-pill text-dark bg-info ms-2 mr-2">
+                You are already Enrolled in this Course
+              </span> 
+              </p>
+              } 
+
+            {userLoginStatus !== 'success' &&
+            <p>
+              <Link to="/student-login/" className="badge badge-pill text-dark bg-info ms-2 mr-2">Please Login to enroll in this Course</Link> 
+            </p>
+            }
+            
+          
           </div>
         </div>
       </div>

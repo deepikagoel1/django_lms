@@ -16,14 +16,15 @@ import TeacherSkillCourses from './TeacherSkillCourses';
 
 
 //Importing from User Module
-import Login from './User/Login';
+import StudentLogin from './User/StudentLogin';
 import StudentRegister from './User/StudentRegister';
-import Dashboard from './User/Dashboard';
-import MyCourses from './User/MyCourses';
-import FavoriteCourses from './User/FavoriteCourses';
-import RecommendedCourses from './User/RecommendedCourses';
-import ProfileSetting from './User/ProfileSetting';
-import ChangePassword from './User/ChangePassword';
+import StudentDashboard from './User/StudentDashboard';
+import StudentCourses from './User/StudentCourses';
+import StudentFavoriteCourses from './User/StudentFavoriteCourses';
+import StudentRecommendedCourses from './User/StudentRecommendedCourses';
+import StudentProfileSetting from './User/StudentProfileSetting';
+import StudentChangePassword from './User/StudentChangePassword';
+import StudentLogout from './User/StudentLogout';
 
 //Importing from Teacher Module
 import TeacherLogin from './teacher/TeacherLogin';
@@ -57,14 +58,16 @@ function Main() {
 
         {/* Student Dashboard Links */}
         <Route path = "/detail/:course_id/" element = {<CourseDetail />} />
-        <Route path = "/student-login/" element = {<Login />} />
+        <Route path = "/student-login/" element = {<StudentLogin />} />
         <Route path = "/student-register/" element = {<StudentRegister />} />
-        <Route path = "/student_dashboard/" element = {<Dashboard />} />
-        <Route path = "/my-courses/" element = {<MyCourses />} />
-        <Route path = "/favorite-courses/" element = {<FavoriteCourses />} />
-        <Route path = "/recommended-courses/" element = {<RecommendedCourses />} />
-        <Route path = "/profile-setting/" element = {<ProfileSetting />} />
-        <Route path = "/change-password/" element = {<ChangePassword />} />
+        <Route path = "/student-dashboard/" element = {<StudentDashboard />} />
+        <Route path = "/student-courses/" element = {<StudentCourses />} />
+        <Route path = "/student-favorite-courses/" element = {<StudentFavoriteCourses />} />
+        <Route path = "/student-recommended-courses/" element = {<StudentRecommendedCourses />} />
+        <Route path = "/student-profile-setting/" element = {<StudentProfileSetting />} />
+        <Route path = "/student-change-password/" element = {<StudentChangePassword />} />
+        <Route path = "/student-logout/" element = {<StudentLogout />} />
+
 
         {/* Teacher Dashboard Links */}
         <Route path = "/teacher-login/" element = {<TeacherLogin />} />

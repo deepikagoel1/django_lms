@@ -1,9 +1,9 @@
 import {Link} from 'react-router-dom';
-import MyCourses from './MyCourses';
+import StudentCourses from './StudentCourses';
 import {Routes as Switch, Route} from 'react-router-dom';
-import Sidebar from './Sidebar';
+import Sidebar from './StudentSidebar';
 
-function ChangePassword()
+function StudentChangePassword()
 {
     return(
         
@@ -40,4 +40,4 @@ function ChangePassword()
     )
 }
 
-export default ChangePassword;
+export default StudentChangePassword;

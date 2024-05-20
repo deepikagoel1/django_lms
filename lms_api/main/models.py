@@ -37,7 +37,7 @@ class CourseCategory(models.Model):
     description = models.TextField()
 
     class Meta:
-        verbose_name_plural = "3. Course Categories" # Since on admin panel, model name appear as "Course categorys" so to change it we have to define class "Meta".
+        verbose_name_plural = "2. Course Categories" # Since on admin panel, model name appear as "Course categorys" so to change it we have to define class "Meta".
     
     def __str__(self):
         return self.title
@@ -51,13 +51,15 @@ class Course(models.Model):
     feature_img = models.ImageField(upload_to ="course_imgs/", null=True)
     techs = models.TextField(null=True)
     class Meta:
-        verbose_name_plural = "4. Course"
+        verbose_name_plural = "3. Course"
     def related_videos(self):
         related_videos = Course.objects.filter(techs__icontains=self.techs)
         return serializers.serialize('json', related_videos)
     def tech_list(self):
         tech_list = self.techs.split(",")
         return tech_list
+    def __str__(self):
+        return self.title
 
 class Student(models.Model):
     full_name = models.CharField(max_length=100)
@@ -67,8 +69,13 @@ class Student(models.Model):
     mobile_no = models.CharField(max_length=20)
     interested_categories = models.TextField()
 
+    def __str__(self):                    # Since, we are not returning anything from Student, so we are returning Student's name as a string.
+        return self.full_name
+
     class Meta:
-        verbose_name_plural = "2. Student"
+        verbose_name_plural = "5. Student"
+    
+    
 
 class Chapter(models.Model): 
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='course_chapters') # This model is created to delete the course category on deletion of the courses.
@@ -77,4 +84,18 @@ class Chapter(models.Model):
     video = models.FileField(upload_to ="chapter_videos/", null=True)
     remarks = models.TextField(null=True)
     class Meta:
-        verbose_name_plural = "5. Chapter"
+        verbose_name_plural = "4. Chapter"
+
+# Student Course Enrollment
+#If Course is deleted by the student and the model then course data will be deleted from the backend so on_delete=models.CASCADE is used.
+#If we want to fetch the number of courses enrolled by the student then we have to use the "Enrolled_Courses" 
+# related name based on the student id and course id then we can fetch the details.
+
+class StudentCourseEnrollment(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name = 'enrolled_courses') # This model is created to delete the course category on deletion of the courses.
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name = 'enrolled_student')
+    enrolled_time = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        verbose_name_plural = "6. Enrolled Courses"
+    def __str__(self):
+        return f"{self.course}-{self.student}"

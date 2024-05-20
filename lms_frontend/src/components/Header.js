@@ -4,6 +4,7 @@ import {Link} from 'react-router-dom';
 
 function Header() {
     const teacherLoginStatus=localStorage.getItem('teacherLoginStatus')
+    const studentLoginStatus=localStorage.getItem('studentLoginStatus')
    
     return (
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -22,30 +23,46 @@ function Header() {
                   
                   <li className="nav-item dropdown">
                   <a className="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Teachers</a>
-                  <ul className="dropdown-menu"  aria-labelledby="navbarDropdown"> {teacherLoginStatus!='true' && 
+                  <ul className="dropdown-menu"  aria-labelledby="navbarDropdown"> 
+                  {teacherLoginStatus!=='true' && 
                         <>
                         {/* <li><a className="dropdown-item" href="/teacher-dashboard">Teacher Dashboard</a></li>
-                        <li><a className="dropdown-item" href="/teacher-logout">Teacher Logout</a></li>
+                        <li><a className="dropdown-item" href="/teacher-logout">Teacher Logout</a></li>*/
+                         } 
                         <li><Link className="dropdown-item" to="/teacher-register">Teacher Register</Link></li>
-                        <li><Link className="dropdown-item" to="/teacher-login">Teacher Login</Link></li> */}
+                        <li><Link className="dropdown-item" to="/teacher-login">Teacher Login</Link></li> 
+                  
                         {/* <li><hr className="dropdown-divider"/></li> */}
                         </>
                         }
-                        <li><Link className="dropdown-item" to="/teacher-register">Teacher Register</Link></li>
-                        <li><Link className="dropdown-item" to="/teacher-login">Teacher Login</Link></li>
+                        {teacherLoginStatus === 'true' && 
+                        <>
+                        <li><Link className="dropdown-item" to="/teacher-dashboard">Teacher Dashboard</Link></li>
+                        {/* <li><Link className="dropdown-item" to="/teacher-login">Teacher Login</Link></li> */}
                         <li><Link className="dropdown-item" to="/teacher-logout">Teacher Logout</Link></li>
+                        </>
+                        }
                     </ul>
                     </li>
                   <li className="nav-item dropdown">
                     <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Student 
                     </a>
-                    <ul className="dropdown-menu">
-                        <li><Link className="dropdown-item" to="/student-register">Register</Link></li>
-                        <li><Link className="dropdown-item" to="/student-login">Login</Link></li>
-                        <li><hr className="dropdown-divider"/></li>
-                        <li><a className="dropdown-item" href="/student_dashboard">Dashboard</a></li>
-                        <li><a className="dropdown-item" href="/student-logout">Logout</a></li>
+                    <ul className="dropdown-menu"  aria-labelledby="navbarDropdown"> 
+                    {studentLoginStatus!=='true' && 
+                    <>
+                    
+                        <li><Link className="dropdown-item" to="/student-register">Student Register</Link></li>
+                        <li><Link className="dropdown-item" to="/student-login">Student Login</Link></li>
+                        </>
+                      }
+                        {/* <li><hr className="dropdown-divider"/></li> */}
+                        {studentLoginStatus === 'true' && 
+                        <>
+                        <li><a className="dropdown-item" href="/student-dashboard">Student Dashboard</a></li>
+                        <li><a className="dropdown-item" href="/student-logout">Student Logout</a></li>
+                        </>
+                      }
                     </ul>
                     </li>
                   

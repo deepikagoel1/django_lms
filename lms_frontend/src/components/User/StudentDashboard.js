@@ -1,9 +1,9 @@
 import {Link} from 'react-router-dom';
-import MyCourses from './MyCourses';
+import StudentCourses from './StudentCourses';
 import {Routes as Switch, Route} from 'react-router-dom';
-import Sidebar from './Sidebar';
+import Sidebar from './StudentSidebar';
 
-function Dashboard()
+function StudentDashboard()
 {
     return(
         
@@ -20,4 +20,4 @@ function Dashboard()
     )
 }
 
-export default Dashboard;
+export default StudentDashboard;
