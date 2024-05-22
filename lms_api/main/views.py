@@ -2,7 +2,7 @@ from django.shortcuts import render
 # Create your views here.
 # We are going to use class based Views as we have to do the multiple things and not Function Based Views
 from rest_framework.views import APIView
-from .serializers import TeacherSerializer, CategorySerializer, CourseSerializer, ChapterSerializer, StudentSerializer, StudentEnrolledCourseSerializer
+from .serializers import TeacherSerializer, CategorySerializer, CourseSerializer, ChapterSerializer, StudentSerializer, StudentEnrolledCourseSerializer, StudentRatingCourseSerializer
 from . import models
 from rest_framework.response import Response
 from rest_framework import generics
@@ -147,7 +147,8 @@ def student_login(request):
 class StudentEnrolledCourseList(generics.ListCreateAPIView):
     queryset = models.StudentCourseEnrollment.objects.all()
     serializer_class = StudentEnrolledCourseSerializer
-
+    
+@csrf_exempt
 def fetch_enroll_status(request,course_id, student_id): 
 
     student = models.Student.objects.filter(id = student_id).first()
@@ -167,3 +168,25 @@ class EnrolledStudentList(generics.ListAPIView):
         course_id = self.kwargs['course_id']
         course = models.Course.objects.get(pk=course_id)
         return models.StudentCourseEnrollment.objects.filter(course=course)
+
+class CourseRatingList(generics.ListCreateAPIView):
+    student = models.CourseRating.objects.all()
+    serializer_class = StudentRatingCourseSerializer
+
+    def get_queryset(self):
+        course_id = self.kwargs['course_id']
+        # student_id = self.kwargs['student_id']
+        course = models.Course.objects.get(pk=course_id)
+        return models.CourseRating.objects.filter(course = course)
+
+@csrf_exempt
+def fetch_rating_status(request,course_id, student_id): 
+
+    student = models.Student.objects.filter(id = student_id).first()
+    course = models.Course.objects.filter(id = course_id).first()
+    RatingState = models.CourseRating.objects.filter(course = course, student = student).count()
+    if RatingState:
+        return JsonResponse({'bool': True})
+    else:
+        return JsonResponse({'bool': False})
+    return render(request)

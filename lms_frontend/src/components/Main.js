@@ -13,6 +13,7 @@ import PopularCourses from './PopularCourses';
 import PopularTeachers from './PopularTeachers';
 import CategoryCourses from './CategoryCourses';
 import TeacherSkillCourses from './TeacherSkillCourses';
+import CourseRating from './CourseRating';
 
 
 //Importing from User Module
@@ -42,6 +43,7 @@ import EditChapter from './teacher/EditChapter';
 import EditCourse from './teacher/EditCourse';
 import EnrolledStudents from './teacher/EnrolledStudents';
 
+
 function Main() {
   return (
     <div className="App">
@@ -55,6 +57,7 @@ function Main() {
         <Route path = "/popular-courses/" element = {<PopularCourses />} />
         <Route path = "/popular-teachers/" element = {<PopularTeachers />} />
         <Route path = "/category-courses/:category_slug/" element = {<CategoryCourses />} />
+        <Route path = "/course-rating/:course_id/" element = {<CourseRating />} />
 
         {/* Student Dashboard Links */}
         <Route path = "/detail/:course_id/" element = {<CourseDetail />} />
