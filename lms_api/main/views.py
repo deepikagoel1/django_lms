@@ -2,7 +2,7 @@ from django.shortcuts import render
 # Create your views here.
 # We are going to use class based Views as we have to do the multiple things and not Function Based Views
 from rest_framework.views import APIView
-from .serializers import TeacherSerializer, CategorySerializer, CourseSerializer, ChapterSerializer, StudentSerializer, StudentEnrolledCourseSerializer, StudentRatingCourseSerializer
+from .serializers import TeacherSerializer, CategorySerializer, CourseSerializer, ChapterSerializer, StudentSerializer, StudentEnrolledCourseSerializer, StudentRatingCourseSerializer, TeacherDashboardSerializer
 from . import models
 from rest_framework.response import Response
 from rest_framework import generics
@@ -10,6 +10,7 @@ from rest_framework import permissions
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.datastructures import MultiValueDictKeyError
+from django.views.decorators.http import require_http_methods
 
 
 # class TeacherList(APIView):
@@ -37,6 +38,10 @@ class TeacherDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = TeacherSerializer
     # permission_classes = [permissions.IsAuthenticated]
 
+class TeacherDashboardView(generics.RetrieveAPIView):
+    queryset = models.Teacher.objects.all()
+    serializer_class = TeacherDashboardSerializer
+
 @csrf_exempt
 def teacher_login(request):
     email = request.POST.get('email')
@@ -50,6 +55,30 @@ def teacher_login(request):
     else:
         return JsonResponse({'bool': False})
     return render(request)
+
+
+@csrf_exempt
+@require_http_methods(["GET", "POST"])
+def teacher_change_password(request, teacher_id):
+
+    new_password = request.POST.get('new_password')
+    confirm_password = request.POST.get('confirm_password')
+    if not new_password or not confirm_password:
+        return JsonResponse({'status': 'error', 'message': 'Missing parameters'}, status=400)
+
+    if new_password != confirm_password:
+        return JsonResponse({'status': 'error', 'message': 'Passwords do not match'}, status=400)
+
+    try:
+        teacherData = models.Teacher.objects.get(id = teacher_id)
+        
+        teacherData.password = new_password  # Ensure this logic adheres to your password hashing logic
+        teacherData.save()
+        return JsonResponse({'bool': True})
+            
+    except models.Teacher.DoesNotExist: 
+        return JsonResponse({'bool': False, 'message': 'Teacher not found'}, status=404)
+    
 
 class CategoryList(generics.ListCreateAPIView):
     queryset = models.CourseCategory.objects.all()
@@ -130,6 +159,10 @@ class StudentList(generics.ListCreateAPIView):
     queryset = models.Student.objects.all()
     serializer_class = StudentSerializer
 
+class StudentDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.Student.objects.all()
+    serializer_class = StudentSerializer
+
 @csrf_exempt
 def student_login(request):
     email = request.POST.get('email')
@@ -143,6 +176,29 @@ def student_login(request):
     else:
         return JsonResponse({'bool': False})
     return render(request)
+
+@csrf_exempt
+@require_http_methods(["GET", "POST"])
+def student_change_password(request, student_id):
+
+    new_password = request.POST.get('new_password')
+    confirm_password = request.POST.get('confirm_password')
+    if not new_password or not confirm_password:
+        return JsonResponse({'status': 'error', 'message': 'Missing parameters'}, status=400)
+
+    if new_password != confirm_password:
+        return JsonResponse({'status': 'error', 'message': 'Passwords do not match'}, status=400)
+
+    try:
+        studentData = models.Student.objects.get(id = student_id)
+        
+        studentData.password = new_password  # Ensure this logic adheres to your password hashing logic
+        studentData.save()
+        return JsonResponse({'bool': True})
+            
+    except models.Student.DoesNotExist: 
+        return JsonResponse({'bool': False, 'message': 'Teacher not found'}, status=404)
+
 
 class StudentEnrolledCourseList(generics.ListCreateAPIView):
     queryset = models.StudentCourseEnrollment.objects.all()
@@ -165,10 +221,15 @@ class EnrolledStudentList(generics.ListAPIView):
     student = models.StudentCourseEnrollment.objects.all()
     serializer_class = StudentEnrolledCourseSerializer
     def get_queryset(self):
-        course_id = self.kwargs['course_id']
-        course = models.Course.objects.get(pk=course_id)
-        return models.StudentCourseEnrollment.objects.filter(course=course)
-
+        if 'course_id' in self.kwargs:
+            course_id = self.kwargs['course_id']
+            course = models.Course.objects.get(pk=course_id)
+            return models.StudentCourseEnrollment.objects.filter(course=course)
+        
+        elif 'teacher_id' in self.kwargs:
+            teacher_id = self.kwargs['teacher_id']
+            teacher = models.Teacher.objects.get(pk=teacher_id)
+            return models.StudentCourseEnrollment.objects.filter(course__teacher = teacher)
 class CourseRatingList(generics.ListCreateAPIView):
     student = models.CourseRating.objects.all()
     serializer_class = StudentRatingCourseSerializer

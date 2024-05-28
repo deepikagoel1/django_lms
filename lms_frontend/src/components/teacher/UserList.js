@@ -1,5 +1,4 @@
 import {Link} from 'react-router-dom';
-import TeacherSidebar from './TeacherSidebar';
 import {useState, useEffect} from 'react';
 import axios from 'axios';
 import { useParams } from "react-router-dom";
@@ -10,16 +9,15 @@ const teacherId =localStorage.getItem('teacherId');
 
 
 
-function EnrolledStudents(){
+function UserList(){
 
-    const {course_id} = useParams(); 
     const[studentData, setStudentData] = useState([]);
 
     useEffect(() =>{
         try{
             //sending the data on the Django Framework in the Json format.
             //Fetching all courses when page loads
-            axios.get(baseUrl + '/fetch-enrolled-students/' + course_id).then((response)=>{
+            axios.get(baseUrl + '/fetch-all-enrolled-students/'+ teacherId).then((response)=>{
             
            console.log(response.data);
            
@@ -39,7 +37,7 @@ function EnrolledStudents(){
             <div className="row">
                  <section className='col-md-9'></section>
                 <div className='card mt-4'>
-                    <h5 className='card-header'>Enrolled Student Details</h5>
+                    <h5 className='card-header'>All Student Details</h5>
                     <div className='card-body'>
                         <table  className='table table-striped table-hover table-bordered border-primary table-default'>
                             <thead>
@@ -69,4 +67,4 @@ function EnrolledStudents(){
     )
 }
 
-export default EnrolledStudents;
+export default UserList;

@@ -35,13 +35,13 @@ import TeacherProfileSetting from './teacher/TeacherProfileSetting';
 import TeacherCourses from './teacher/TeacherCourses';
 import AddCourses from './teacher/AddCourses';
 import TeacherChangePassword from './teacher/TeacherChangePassword';
-import MyUsers from './teacher/MyUsers';
 import TeacherLogout from './teacher/TeacherLogout';
 import AddChapter from './teacher/AddChapter';
 import CourseChapter from './teacher/CourseChapter';
 import EditChapter from './teacher/EditChapter';
 import EditCourse from './teacher/EditCourse';
 import EnrolledStudents from './teacher/EnrolledStudents';
+import UserList from './teacher/UserList';
 
 
 function Main() {
@@ -59,6 +59,7 @@ function Main() {
         <Route path = "/category-courses/:category_slug/" element = {<CategoryCourses />} />
         <Route path = "/course-rating/:course_id/" element = {<CourseRating />} />
 
+
         {/* Student Dashboard Links */}
         <Route path = "/detail/:course_id/" element = {<CourseDetail />} />
         <Route path = "/student-login/" element = {<StudentLogin />} />
@@ -74,13 +75,12 @@ function Main() {
 
         {/* Teacher Dashboard Links */}
         <Route path = "/teacher-login/" element = {<TeacherLogin />} />
-        <Route path = "/teacher-dashboard/" element = {<TeacherDashboard />} />
+        <Route path = "/teacher-dashboard/:teacher_id/" element = {<TeacherDashboard />} />
         <Route path = "/teacher-register/" element = {<TeacherRegister />} />
         <Route path = "/teacher-profile-setting/" element = {<TeacherProfileSetting />} />
         <Route path = "/teacher-courses/" element = {<TeacherCourses />} />
         <Route path = "/teacher-add-course/" element = {<AddCourses />} />
         <Route path = "/teacher-change-password/" element = {<TeacherChangePassword />} />
-        <Route path = "/teacher-myusers/" element = {<MyUsers />} />
         <Route path = "/teacher-logout/" element = {<TeacherLogout />} />
         <Route path = "/add-chapter/:course_id/" element = {<AddChapter />} />
         <Route path = "/all-chapters/:course_id" element = {<CourseChapter />} />
@@ -88,6 +88,7 @@ function Main() {
         <Route path = "/edit-course/:course_id" element = {<EditCourse />} />
         <Route path = "/teacher-skill-courses/:skill_name/:teacher_id" element = {<TeacherSkillCourses />} />
         <Route path = "/fetch-enrolled-students/:course_id" element = {<EnrolledStudents />} />
+        <Route path = "/teacher-user-details/" element = {<UserList />} />
 
       </Switch>
       <Footer />

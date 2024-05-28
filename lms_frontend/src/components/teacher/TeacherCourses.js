@@ -51,15 +51,25 @@ function TeacherCourses(){
                                 <tr className='table-secondary'>
                                     <th>Name</th>
                                     <th>Image</th>
+                                    <th>Average Rating</th>
                                     <th>Total Enrolled</th>
                                     <th>Action</th>
+                                    
                                 </tr>
                             </thead>
                             <tbody>
                                 {courseData.map((course, index) =>
                                 <tr key={course.title}>
                                 <td><Link to={"/all-chapters/"+ course.id}>{course.title}</Link></td>
+                                
+
                                 <td><img src = {course.feature_img} width="100" className="rounded" alt={course.title} /></td>
+                                {course.course_rating === null &&
+                                <td>{course.course_rating = 0}</td>
+                                }
+                                {course.course_rating !=="" &&
+                                <td>{course.course_rating.toFixed(1)}/5</td>
+                                }
                                 <td><Link to={'/fetch-enrolled-students/' + course.id + '/'}>{course.total_enrolled_students}</Link></td>
                                 <td>
                                     <button type="button" className='btn btn-danger btn-sm'>Delete</button>
