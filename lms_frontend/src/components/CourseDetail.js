@@ -31,7 +31,7 @@ function CourseDetail() {
   //let is used for the blog.
   //const is used for whole of the document.
   const studentId =localStorage.getItem('studentId');
-
+  const [favoriteStatus, setfavoritestatus] = useState();
   // const {chapter_id} = useParams();
   const no_of_Star = 5;
 
@@ -75,6 +75,45 @@ function CourseDetail() {
       console.log('Error submitting form data:',error);
     
   }
+
+  // Fetching Rating Status
+    try{
+      //sending the data on the Django Framework in the Json format.
+      //Fetching all courses when page loads
+      axios.get(baseUrl + '/fetch-course-rating/' + course_id +'/' + studentId).then((response)=>{
+        if (response.data.bool === true){
+            console.log(response)
+            setRatingStatus('success')
+        }
+      // setEnrollState('success');
+      console.log(response.data)
+      });
+  }
+  catch(error){
+      console.log('Error submitting form data:',error);
+    
+  }
+
+  // Fetching Favorite Course Status
+  try{
+    //sending the data on the Django Framework in the Json format.
+    //Fetching all courses when page loads
+    axios.get(baseUrl + '/fetch-fav-status/' + studentId +'/' + course_id).then((response)=>{
+      if (response.data.bool === true){
+          // console.log(response)
+          setfavoritestatus('success');
+      }
+      else{
+        setfavoritestatus('');
+      }
+    // setEnrollState('success');
+    console.log(response.data)
+    });
+}
+catch(error){
+    console.log('Error submitting form data:',error);
+  
+}
 
     const studentLoginStatus=localStorage.getItem('studentLoginStatus');
     if(studentLoginStatus==='true'){
@@ -126,6 +165,95 @@ function CourseDetail() {
       }
 
   }
+
+  //Mark as Favourite Course
+  const markAsFav = ()=>{
+    const _FormData = new FormData();
+    _FormData.append("course", course_id);
+    _FormData.append("student", studentId);
+    _FormData.append('status', true);
+    try{
+      //sending the data on the Django Framework in the Json format.
+      axios.post(baseUrl + '/student-add-favorite-course/', _FormData,{
+          headers : {
+              'Content-Type' : 'multipart/form-data' ,
+              "Access-Control-Allow-Origin" : "*"
+          }
+      }).then((res) =>{
+          console.log(res.data);
+          // window.location.href = "/teacher-add-course";
+          if(res.status === 200 || res.status === 201){
+          Swal.fire({
+            title: 'The course has been added in the Wish list!',
+            icon: 'success',
+            toast: true,
+            timer: 1000000,
+            type: 'success',
+            position: 'top-right',
+            timerProgressBar: true,
+            showConfirmButton: true
+          });
+          
+          setfavoritestatus('success');
+        }
+      });
+         
+  }
+  catch(error){
+      console.log('Error while marking the course as favorite:',error);
+      // setteacherData({
+      //     ...teacherData,
+      //     'status' : 'error'
+          
+      // });
+  }
+
+}
+
+//Remove from Favourite Course
+const removeFav = (pk)=>{
+  const _FormData = new FormData();
+  _FormData.append("course", course_id);
+  _FormData.append("student", studentId);
+  _FormData.append('status', false);
+  try{
+    //sending the data on the Django Framework in the Json format.
+    axios.post(baseUrl + '/student-remove-favorite-course/'+course_id+'/'+studentId, _FormData,{
+        headers : {
+            'Content-Type' : 'multipart/form-data' ,
+            "Access-Control-Allow-Origin" : "*"
+        }
+    }).then((res) =>{
+        console.log(res.data);
+        // window.location.href = "/teacher-add-course";
+        if(res.status === 200 || res.status === 201){
+        Swal.fire({
+          title: 'The course has been removed from the Wish list!',
+          icon: 'success',
+          toast: true,
+          timer: 1000000,
+          type: 'success',
+          position: 'top-right',
+          timerProgressBar: true,
+          showConfirmButton: false
+        });
+        
+        setfavoritestatus('success');
+      }
+    });
+       
+}
+catch(error){
+    console.log('Error while marking the course as favorite:',error);
+    // setteacherData({
+    //     ...teacherData,
+    //     'status' : 'error'
+        
+    // });
+}
+
+}
+
 
   const submitForm=()=>{
       
@@ -204,24 +332,7 @@ function CourseDetail() {
         
     }
 
-    // Fetching Rating Status
-    try{
-      //sending the data on the Django Framework in the Json format.
-      //Fetching all courses when page loads
-      axios.get(baseUrl + '/fetch-course-rating/' + course_id +'/' + studentId).then((response)=>{
-        if (response.data.bool === true){
-            console.log(response)
-            setRatingStatus('success')
-        }
-      // setEnrollState('success');
-      console.log(response.data)
-      });
-  }
-  catch(error){
-      console.log('Error submitting form data:',error);
     
-  }
-
       
   return (
     <div className="card text-right">
@@ -365,7 +476,18 @@ function CourseDetail() {
             </p>
             }
             
-          
+            {userLoginStatus === 'success' && favoriteStatus !== 'success' &&
+            <p>
+              <button onClick={markAsFav} title= "Add in your Favorite Course List" type = "button" className="btn btn-outline-danger"><i className = "bi bi-heart-fill"></i></button> 
+            </p>
+            }
+
+            {userLoginStatus === 'success' && favoriteStatus === 'success' &&
+            <p>
+              <button onClick={removeFav} title= "Remove from your Favorite Course List" type = "button" className="btn btn-outline-danger"><i className = "bi bi-heart-fill"></i></button> 
+            </p>
+            }
+
           </div>
         </div>
       </div>

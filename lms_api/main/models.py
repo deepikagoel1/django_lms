@@ -132,3 +132,13 @@ class CourseRating(models.Model):
         verbose_name_plural = "7. Courses Rating"
     def __str__(self):
         return f"{self.course}-{self.student}-{self.rating}"
+
+class StudentFavoriteCourse(models.Model):
+    course = models.ForeignKey(Course, on_delete = models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    status = models.BooleanField(default = False)
+
+    class Meta:
+        verbose_name_plural = "8. Student Favorite Course"
+    def __str__(self):
+        return f"{self.course}-{self.student}"

@@ -2,7 +2,7 @@ from django.shortcuts import render
 # Create your views here.
 # We are going to use class based Views as we have to do the multiple things and not Function Based Views
 from rest_framework.views import APIView
-from .serializers import TeacherSerializer, CategorySerializer, CourseSerializer, ChapterSerializer, StudentSerializer, StudentEnrolledCourseSerializer, StudentRatingCourseSerializer, TeacherDashboardSerializer
+from .serializers import TeacherSerializer, CategorySerializer, CourseSerializer, ChapterSerializer, StudentSerializer, StudentEnrolledCourseSerializer, StudentRatingCourseSerializer, TeacherDashboardSerializer, StudentFavCourseSerializer
 from . import models
 from rest_framework.response import Response
 from rest_framework import generics
@@ -11,7 +11,7 @@ from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.datastructures import MultiValueDictKeyError
 from django.views.decorators.http import require_http_methods
-
+from django.db.models import Q
 
 # class TeacherList(APIView):
 #     def get(self, request):  #Using post method instead of get method from API
@@ -107,6 +107,20 @@ class CourseList(generics.ListCreateAPIView):
             teacher = self.request.GET['teacher']
             teacher = models.Teacher.objects.filter(id = teacher).first()
             qs = models.Course.objects.filter(techs__icontains = skill_name,teacher=teacher)
+
+        elif 'studentId' in self.kwargs:
+            student_id = self.kwargs['studentId']
+            student = models.Student.objects.get(pk=student_id)
+            # qs = models.Course.objects.filter(techs__icontains = student.interested_categories)
+            # print(qs.query)
+            # return models.Course.objects.filter(techs__icontains = student.interested_categories)
+            print(student.interested_categories)
+            queries = [Q(techs__iendswith = value) for value in student.interested_categories]
+            query = queries.pop()
+            for item in queries:
+                query |= item
+            qs = models.Course.objects.filter(query)
+            return qs
         return qs
     
 #To show the courses which were added by a specific teacher so it will be TeacherCourseList.
@@ -229,7 +243,13 @@ class EnrolledStudentList(generics.ListAPIView):
         elif 'teacher_id' in self.kwargs:
             teacher_id = self.kwargs['teacher_id']
             teacher = models.Teacher.objects.get(pk=teacher_id)
-            return models.StudentCourseEnrollment.objects.filter(course__teacher = teacher)
+            return models.StudentCourseEnrollment.objects.filter(course__teacher = teacher).values('teacher_id').distinct()
+
+        elif 'student_id' in self.kwargs:
+            student_id = self.kwargs['student_id']
+            student = models.Student.objects.get(pk=student_id)
+            return models.StudentCourseEnrollment.objects.filter(student = student)
+
 class CourseRatingList(generics.ListCreateAPIView):
     student = models.CourseRating.objects.all()
     serializer_class = StudentRatingCourseSerializer
@@ -251,3 +271,42 @@ def fetch_rating_status(request,course_id, student_id):
     else:
         return JsonResponse({'bool': False})
     return render(request)
+
+class studentEnrollCourseList(generics.ListCreateAPIView):
+    queryset = models.StudentCourseEnrollment.objects.all()
+    serializer_class = StudentEnrolledCourseSerializer
+
+# class StudentFavCourseDetail(generics.ListCreateAPIView):
+#     queryset = models.StudentFavoriteCourse.objects.all()
+#     serializer_class = StudentFavCourseSerializer
+
+class StudentFavCourseList(generics.ListCreateAPIView):
+    queryset = models.StudentFavoriteCourse.objects.all()
+    serializer_class = StudentFavCourseSerializer
+
+def fetch_enroll_status(request, student_id, course_id):
+    student = models.Student.objects.filter(id = student_id).first()
+    course = models.Course.objects.filter(id = course_id).first()
+    enrollStatus = models.StudentCourseEnrollment.objects.filter(course = course, student = student).count()
+    if enrollStatus:
+        return JsonResponse({'bool': True})
+    else:
+        return JsonResponse({'bool': False})
+
+def fetch_fav_status(request, student_id, course_id):
+    student = models.Student.objects.filter(id = student_id).first()
+    course = models.Course.objects.filter(id = course_id).first()
+    favstatus = models.StudentFavoriteCourse.objects.filter(course = course, student = student).first()
+    if favstatus and favstatus.status == True:
+        return JsonResponse({'bool': True})
+    else:
+        return JsonResponse({'bool': False})  
+
+def rem_fav_course(request,course_id, student_id):
+    student = models.Student.objects.filter(id = student_id).first()
+    course = models.Course.objects.filter(id = course_id).first()
+    favstatus = models.StudentFavoriteCourse.objects.filter(course = course, student = student).delete()
+    if favstatus:
+        return JsonResponse({'bool': True})
+    else:
+        return JsonResponse({'bool': False})  

@@ -78,7 +78,7 @@ class StudentEnrolledCourseSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         self.Meta.depth = 0
         if request and request.method == 'GET':
-            self.Meta.depth = 1
+            self.Meta.depth = 2
 
 class StudentRatingCourseSerializer(serializers.ModelSerializer):
     class Meta:
@@ -91,3 +91,14 @@ class StudentRatingCourseSerializer(serializers.ModelSerializer):
         self.Meta.depth = 0
         if request and request.method == 'GET':
             self.Meta.depth = 1
+
+class StudentFavCourseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.StudentFavoriteCourse
+        fields = ['id', 'course', 'student', 'status']
+    def __init__(self, *args, **kwargs):
+        super(StudentFavCourseSerializer, self).__init__(*args, **kwargs)
+        request = self.context.get('request')
+        self.Meta.depth = 0
+        if request and request.method == 'GET':
+            self.Meta.depth = 2
