@@ -17,4 +17,6 @@ class NotificationAdmin(admin.ModelAdmin):
     list_display = ['id', 'notif_subject', 'notif_for', 'notif_read_status']
 
 admin.site.register(models.Notification, NotificationAdmin)
-
+admin.site.register(models.Quiz)
+admin.site.register(models.QuizQuestions)
+admin.site.register(models.CourseQuiz)

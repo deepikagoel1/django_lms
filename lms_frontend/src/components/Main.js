@@ -45,6 +45,9 @@ import EnrolledStudents from './teacher/EnrolledStudents';
 import UserList from './teacher/UserList';
 import AddAssignment from './teacher/AddAssignment';
 import ViewAssignment from './teacher/ViewAssignment';
+import AddQuiz from './teacher/AddQuiz';
+import AllQuiz from './teacher/AllQuiz';
+
 
 function Main() {
   return (
@@ -93,6 +96,8 @@ function Main() {
         <Route path = "/teacher-user-details/" element = {<UserList />} />
         <Route path = "/teacher-add-assignment/:student_id/:teacher_id/" element = {<AddAssignment />} />
         <Route path = "/teacher-view-assignment/:student_id/:teacher_id/" element = {<ViewAssignment />} />
+        <Route path = "/teacher-add-quiz" element = {<AddQuiz />} />
+        <Route path = "/teacher-all-quiz" element = {<AllQuiz />} />
       </Switch>
       <Footer />
       

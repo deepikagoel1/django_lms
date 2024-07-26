@@ -192,3 +192,37 @@ class Notification(models.Model):
     notif_read_status = models.BooleanField(default = False, verbose_name="Notification Status?")
     class Meta:
         verbose_name_plural = "10. Notifications"
+
+# Quiz Model
+class Quiz(models.Model):
+    teacher = models.ForeignKey(Teacher, on_delete = models.CASCADE, null = True)
+    title = models.TextField(null= True)
+    detail = models.TextField(null= True)
+    add_time = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        verbose_name_plural = "11. Quiz"
+
+# Quiz Questions Model
+class QuizQuestions(models.Model):
+    quiz = models.ForeignKey(Quiz, on_delete = models.CASCADE, null = True)
+    questions = models.TextField(null= True)
+    ans1 = models.CharField(max_length= 200)
+    ans2 = models.CharField(max_length= 200)
+    ans3 = models.CharField(max_length= 200)
+    ans4 = models.CharField(max_length= 200)
+    right_ans = models.CharField(max_length= 200)
+    add_time = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = "12. Quiz Questions"
+
+
+# Add Quiz to Course
+class CourseQuiz(models.Model):
+    course = models.ForeignKey(Course, on_delete= models.CASCADE,null = True)
+    quiz = models.ForeignKey(Quiz, on_delete= models.CASCADE,null=True)
+    add_time = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = "13. Course Quiz"
+

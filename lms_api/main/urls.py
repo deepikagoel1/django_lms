@@ -57,4 +57,10 @@ urlpatterns = [
     path('save-notification/', views.NotificationList.as_view()),
     path('teacher/fetch-all-notifications/<int:teacher_id>/', views.NotificationList.as_view()),
 
+    # Quiz Start
+    path('quiz/', views.QuizList.as_view()),
+    path('teacher-quiz/<int:teacher_id>/', views.TeacherQuizList.as_view()),
+
+    # Quiz End
+
     ]

@@ -2,7 +2,7 @@ from django.shortcuts import render
 # Create your views here.
 # We are going to use class based Views as we have to do the multiple things and not Function Based Views
 from rest_framework.views import APIView
-from .serializers import TeacherSerializer, CategorySerializer, CourseSerializer, ChapterSerializer, StudentSerializer, StudentEnrolledCourseSerializer, StudentRatingCourseSerializer, TeacherDashboardSerializer, StudentFavCourseSerializer, StudentAssSerializer, StudentDashboardSerializer, NotificationSerializer
+from .serializers import TeacherSerializer, CategorySerializer, CourseSerializer, ChapterSerializer, StudentSerializer, StudentEnrolledCourseSerializer, StudentRatingCourseSerializer, TeacherDashboardSerializer, StudentFavCourseSerializer, StudentAssSerializer, StudentDashboardSerializer, NotificationSerializer, QuizSerializer
 from . import models
 from rest_framework.response import Response
 from rest_framework import generics, status
@@ -366,3 +366,17 @@ class NotificationList(generics.ListCreateAPIView):
             teacher_id = self.kwargs['teacher_id']
             teacher = models.Teacher.objects.get(pk = teacher_id)
             return models.Notification.objects.filter(teacher = teacher, notif_for = 'teacher', notif_subject = 'assignment completed', notif_read_status = False)
+
+
+class QuizList(generics.ListCreateAPIView):
+    queryset = models.Quiz.objects.all()
+    serializer_class = QuizSerializer
+
+class TeacherQuizList(generics.ListCreateAPIView):
+    # queryset = models.Course.objects.all()
+    serializer_class = QuizSerializer
+    # permission_classes = [permissions.IsAuthenticated]
+    def get_queryset(self):
+        teacher_id = self.kwargs['teacher_id']
+        teacher = models.Teacher.objects.get(pk=teacher_id)
+        return models.Quiz.objects.filter(teacher=teacher)
