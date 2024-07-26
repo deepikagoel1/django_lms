@@ -10,5 +10,11 @@ admin.site.register(models.Chapter)
 admin.site.register(models.Student)
 admin.site.register(models.StudentCourseEnrollment)
 admin.site.register(models.CourseRating)
+admin.site.register(models.StudentFavoriteCourse)
+admin.site.register(models.StudentAssignment)
 
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = ['id', 'notif_subject', 'notif_for', 'notif_read_status']
+
+admin.site.register(models.Notification, NotificationAdmin)
 

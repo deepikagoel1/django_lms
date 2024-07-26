@@ -5,6 +5,7 @@ import {Link} from 'react-router-dom';
 function Header() {
     const teacherLoginStatus=localStorage.getItem('teacherLoginStatus')
     const studentLoginStatus=localStorage.getItem('studentLoginStatus')
+    const teacherId =localStorage.getItem('teacherId');
    
     return (
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -37,7 +38,7 @@ function Header() {
                         }
                         {teacherLoginStatus === 'true' && 
                         <>
-                        <li><Link className="dropdown-item" to="/teacher-dashboard">Teacher Dashboard</Link></li>
+                        <li><Link className="dropdown-item" to={`/teacher-dashboard/${teacherId}/`}>Teacher Dashboard</Link></li>
                         {/* <li><Link className="dropdown-item" to="/teacher-login">Teacher Login</Link></li> */}
                         <li><Link className="dropdown-item" to="/teacher-logout">Teacher Logout</Link></li>
                         </>

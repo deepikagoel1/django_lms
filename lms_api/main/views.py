@@ -2,16 +2,19 @@ from django.shortcuts import render
 # Create your views here.
 # We are going to use class based Views as we have to do the multiple things and not Function Based Views
 from rest_framework.views import APIView
-from .serializers import TeacherSerializer, CategorySerializer, CourseSerializer, ChapterSerializer, StudentSerializer, StudentEnrolledCourseSerializer, StudentRatingCourseSerializer, TeacherDashboardSerializer, StudentFavCourseSerializer
+from .serializers import TeacherSerializer, CategorySerializer, CourseSerializer, ChapterSerializer, StudentSerializer, StudentEnrolledCourseSerializer, StudentRatingCourseSerializer, TeacherDashboardSerializer, StudentFavCourseSerializer, StudentAssSerializer, StudentDashboardSerializer, NotificationSerializer
 from . import models
 from rest_framework.response import Response
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework import permissions
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.datastructures import MultiValueDictKeyError
 from django.views.decorators.http import require_http_methods
 from django.db.models import Q
+from rest_framework.decorators import api_view
+from rest_framework.exceptions import ValidationError
+
 
 # class TeacherList(APIView):
 #     def get(self, request):  #Using post method instead of get method from API
@@ -243,12 +246,12 @@ class EnrolledStudentList(generics.ListAPIView):
         elif 'teacher_id' in self.kwargs:
             teacher_id = self.kwargs['teacher_id']
             teacher = models.Teacher.objects.get(pk=teacher_id)
-            return models.StudentCourseEnrollment.objects.filter(course__teacher = teacher).values('teacher_id').distinct()
+            return models.StudentCourseEnrollment.objects.filter(course__teacher = teacher).distinct()
 
         elif 'student_id' in self.kwargs:
             student_id = self.kwargs['student_id']
             student = models.Student.objects.get(pk=student_id)
-            return models.StudentCourseEnrollment.objects.filter(student = student)
+            return models.StudentCourseEnrollment.objects.filter(student = student).distinct()
 
 class CourseRatingList(generics.ListCreateAPIView):
     student = models.CourseRating.objects.all()
@@ -284,6 +287,14 @@ class StudentFavCourseList(generics.ListCreateAPIView):
     queryset = models.StudentFavoriteCourse.objects.all()
     serializer_class = StudentFavCourseSerializer
 
+    def get_queryset(self):
+
+        if 'student_id' in self.kwargs:
+            student_id = self.kwargs['student_id']
+            student = models.Student.objects.get(pk=student_id)
+            return models.StudentFavoriteCourse.objects.filter(student = student).distinct()
+
+
 def fetch_enroll_status(request, student_id, course_id):
     student = models.Student.objects.filter(id = student_id).first()
     course = models.Course.objects.filter(id = course_id).first()
@@ -310,3 +321,48 @@ def rem_fav_course(request,course_id, student_id):
         return JsonResponse({'bool': True})
     else:
         return JsonResponse({'bool': False})  
+
+class AssignmentList(generics.ListCreateAPIView):
+    queryset = models.StudentAssignment.objects.all()
+    serializer_class = StudentAssSerializer
+
+    def get_queryset(self):
+        student_id = self.kwargs['student_id']
+        teacher_id = self.kwargs['teacher_id']
+        student = models.Student.objects.get(pk=student_id)
+        teacher = models.Teacher.objects.get(pk=teacher_id)
+        models.Notification .objects.filter(teacher=teacher,notif_for='teacher',notif_subject='assignment completed').update(notif_read_status=True)
+        return models.StudentAssignment.objects.filter(student=student, teacher=teacher)
+
+class MyAssignmentList(generics.ListCreateAPIView):
+    queryset = models.StudentAssignment.objects.all()
+    serializer_class = StudentAssSerializer
+
+    def get_queryset(self):
+        student_id = self.kwargs['student_id']
+        student = models.Student.objects.get(pk=student_id)
+        models.Notification .objects.filter(student=student,notif_for='student',notif_subject='assignment').update(notif_read_status=True)
+        return models.StudentAssignment.objects.filter(student=student)
+
+
+class UpdateAssignmentList(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.StudentAssignment.objects.all()
+    serializer_class = StudentAssSerializer
+ 
+class StudentDashboardView(generics.RetrieveAPIView):
+    queryset = models.Student.objects.all()
+    serializer_class = StudentDashboardSerializer
+
+class NotificationList(generics.ListCreateAPIView):
+    queryset = models.Notification.objects.all()
+    serializer_class = NotificationSerializer
+
+    def get_queryset(self):
+        if 'student_id' in self.kwargs:
+            student_id = self.kwargs['student_id']
+            student = models.Student.objects.get(pk = student_id)
+            return models.Notification.objects.filter(student = student, notif_for = 'student', notif_subject = 'assignment', notif_read_status = False)
+        elif 'teacher_id' in self.kwargs:
+            teacher_id = self.kwargs['teacher_id']
+            teacher = models.Teacher.objects.get(pk = teacher_id)
+            return models.Notification.objects.filter(teacher = teacher, notif_for = 'teacher', notif_subject = 'assignment completed', notif_read_status = False)

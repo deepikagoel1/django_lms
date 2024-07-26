@@ -38,7 +38,8 @@ function TeacherLogin()
                     if(response.data.bool === true){
                         localStorage.setItem('teacherLoginStatus', true);
                         localStorage.setItem('teacherId', response.data.teacher_id);
-                        window.location.href = '/teacher-dashboard';
+                        const teacherId =localStorage.getItem('teacherId');
+                        window.location.href = '/teacher-dashboard'+teacherId;
                         //On browser teacher login and teacherlOginstatus gets saved which we try to fetch.
                     }
                     else{
@@ -58,9 +59,11 @@ function TeacherLogin()
     }
 
     const teacherLoginStatus=localStorage.getItem('teacherLoginStatus');
+    const teacherId =localStorage.getItem('teacherId');
     if(teacherLoginStatus==='true'){
-        window.location.href = '/teacher-dashboard';
+        window.location.href = '/teacher-dashboard'+teacherId;
     }
+    
 
     useEffect(() => {
         document.title = 'Teacher login'

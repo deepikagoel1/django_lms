@@ -77,8 +77,9 @@ function TeacherRegister()
     });
 
     const teacherLoginStatus=localStorage.getItem('teacherLoginStatus')
+    const teacherId =localStorage.getItem('teacherId');
     if(teacherLoginStatus==='true'){
-        window.location.href = '/teacher-dashboard';
+        window.location.href = '/teacher-dashboard'+teacherId;
     }
     
     return(

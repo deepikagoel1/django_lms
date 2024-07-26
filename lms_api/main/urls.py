@@ -48,5 +48,13 @@ urlpatterns = [
     path('student-add-favorite-course/', views.StudentFavCourseList.as_view()),
     path('student-remove-favorite-course/<int:course_id>/<int:student_id>', views.rem_fav_course),
     path('fetch-fav-status/<int:student_id>/<int:course_id>', views.fetch_fav_status),
+    path('fetch-fav-courses/<int:student_id>', views.StudentFavCourseList.as_view()),
+    path('student-assignment/<int:teacher_id>/<int:student_id>', views.AssignmentList.as_view()),
+    path('my-assignment/<int:student_id>', views.MyAssignmentList.as_view()),
+    path('update-assignment/<int:pk>', views.UpdateAssignmentList.as_view()),
+    path('student/dashboard/<int:pk>/', views.StudentDashboardView.as_view()),
+    path('student/fetch-all-notifications/<int:student_id>/', views.NotificationList.as_view()),
+    path('save-notification/', views.NotificationList.as_view()),
+    path('teacher/fetch-all-notifications/<int:teacher_id>/', views.NotificationList.as_view()),
 
     ]

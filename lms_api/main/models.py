@@ -89,12 +89,39 @@ class Student(models.Model):
     qualification = models.CharField(max_length=200)
     mobile_no = models.CharField(max_length=20)
     interested_categories = models.TextField()
+    profile_img = models.ImageField(upload_to = "student_profile_imgs/", null=True)
+
 
     def __str__(self):                    # Since, we are not returning anything from Student, so we are returning Student's name as a string.
         return self.full_name
 
+    # Total Enrolled Courses
+
+    def total_enrolled_courses(self):
+        total_courses = StudentCourseEnrollment.objects.filter(student=self).count()
+        return total_courses
+
+    # Total Favorite Courses
+
+    def total_favorite_courses(self):
+        total_fav_courses = StudentFavoriteCourse.objects.filter(student = self).count()
+        return total_fav_courses
+
+    # completed Assignments
+    
+    def completed_assignments(self):
+        comp_ass = StudentAssignment.objects.filter(student = self, student_status = True).count()
+        return comp_ass
+
+    # Pending Assignments
+    
+    def pending_assignments(self):
+        pen_ass = StudentAssignment.objects.filter(student = self, student_status = False).count()
+        return pen_ass
+    
     class Meta:
         verbose_name_plural = "5. Student"
+
     
     
 
@@ -142,3 +169,26 @@ class StudentFavoriteCourse(models.Model):
         verbose_name_plural = "8. Student Favorite Course"
     def __str__(self):
         return f"{self.course}-{self.student}"
+
+class StudentAssignment(models.Model):
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null = True)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, null = True)
+    title = models.TextField(null= True)
+    detail = models.TextField(null= True)
+    add_time = models.DateTimeField(auto_now_add=True)
+    student_status = models.BooleanField(default=False)
+    class Meta:
+        verbose_name_plural = "9. Student Assignments"
+    def __str__(self):
+        return f"{title}"
+
+# Notifiation Moddel
+class Notification(models.Model):
+    teacher = models.ForeignKey(Teacher, on_delete= models.CASCADE,null = True)
+    student = models.ForeignKey(Student, on_delete= models.CASCADE,null=True)
+    notif_subject = models.CharField(max_length=200, verbose_name="Notification Subject", null=True)
+    notif_for = models.CharField(max_length=200, verbose_name="Notification For", null=True)
+    notif_creat_time = models.DateTimeField(auto_now_add=True, verbose_name="Notification Created At", null=True)
+    notif_read_status = models.BooleanField(default = False, verbose_name="Notification Status?")
+    class Meta:
+        verbose_name_plural = "10. Notifications"

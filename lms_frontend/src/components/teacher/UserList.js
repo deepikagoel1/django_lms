@@ -8,10 +8,11 @@ const baseUrl = "http://localhost:8000/api";
 const teacherId =localStorage.getItem('teacherId');
 
 
-
 function UserList(){
 
     const[studentData, setStudentData] = useState([]);
+    const {student_id} = useParams();
+
 
     useEffect(() =>{
         try{
@@ -45,6 +46,7 @@ function UserList(){
                                     <th>Name</th>
                                     <th>Qualification</th>
                                     <th>Interested Categories</th>
+                                    <th>Assignment</th>
                                     {/* <th>Action</th> */}
                                 </tr>
                             </thead>
@@ -55,7 +57,10 @@ function UserList(){
                                 <td>{row.student.full_name}</td>
                                 <td>{row.student.qualification}</td>
                                 <td>{row.student.interested_categories}</td>
-                                
+                                <td>
+                                    <Link to={`/teacher-view-assignment/${row.student.id}/${teacherId}/`} className='btn btn-sm btn-warning'>Assignments</Link>
+                                    <Link to={`/teacher-add-assignment/${row.student.id}/${teacherId}/`} className='btn btn-sm btn-success ms-2'>Add Assignments</Link>
+                                </td>
                                 </tr>
                                 )}
                             </tbody>

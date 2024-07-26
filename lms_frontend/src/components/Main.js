@@ -26,6 +26,7 @@ import StudentRecommendedCourses from './User/StudentRecommendedCourses';
 import StudentProfileSetting from './User/StudentProfileSetting';
 import StudentChangePassword from './User/StudentChangePassword';
 import StudentLogout from './User/StudentLogout';
+import StudentAssignment from './User/StudentAssignment';
 
 //Importing from Teacher Module
 import TeacherLogin from './teacher/TeacherLogin';
@@ -42,7 +43,8 @@ import EditChapter from './teacher/EditChapter';
 import EditCourse from './teacher/EditCourse';
 import EnrolledStudents from './teacher/EnrolledStudents';
 import UserList from './teacher/UserList';
-
+import AddAssignment from './teacher/AddAssignment';
+import ViewAssignment from './teacher/ViewAssignment';
 
 function Main() {
   return (
@@ -71,7 +73,7 @@ function Main() {
         <Route path = "/student-profile-setting/" element = {<StudentProfileSetting />} />
         <Route path = "/student-change-password/" element = {<StudentChangePassword />} />
         <Route path = "/student-logout/" element = {<StudentLogout />} />
-
+        <Route path = "/student-assignments/" element = {<StudentAssignment />} />
 
         {/* Teacher Dashboard Links */}
         <Route path = "/teacher-login/" element = {<TeacherLogin />} />
@@ -89,7 +91,8 @@ function Main() {
         <Route path = "/teacher-skill-courses/:skill_name/:teacher_id" element = {<TeacherSkillCourses />} />
         <Route path = "/fetch-enrolled-students/:course_id" element = {<EnrolledStudents />} />
         <Route path = "/teacher-user-details/" element = {<UserList />} />
-
+        <Route path = "/teacher-add-assignment/:student_id/:teacher_id/" element = {<AddAssignment />} />
+        <Route path = "/teacher-view-assignment/:student_id/:teacher_id/" element = {<ViewAssignment />} />
       </Switch>
       <Footer />
       
