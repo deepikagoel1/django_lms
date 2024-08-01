@@ -199,6 +199,9 @@ class Quiz(models.Model):
     title = models.TextField(null= True)
     detail = models.TextField(null= True)
     add_time = models.DateTimeField(auto_now_add=True)
+
+    def assign_status(self):
+        return CourseQuiz.objects.filter(quiz = self).count()
     class Meta:
         verbose_name_plural = "11. Quiz"
 
@@ -206,10 +209,10 @@ class Quiz(models.Model):
 class QuizQuestions(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete = models.CASCADE, null = True)
     questions = models.TextField(null= True)
-    ans1 = models.CharField(max_length= 200)
-    ans2 = models.CharField(max_length= 200)
-    ans3 = models.CharField(max_length= 200)
-    ans4 = models.CharField(max_length= 200)
+    ans1 = models.CharField(max_length= 200,)
+    ans2 = models.CharField(max_length= 200,)
+    ans3 = models.CharField(max_length= 200, null = True)
+    ans4 = models.CharField(max_length= 200, null = True)
     right_ans = models.CharField(max_length= 200)
     add_time = models.DateTimeField(auto_now_add=True)
 
@@ -219,10 +222,11 @@ class QuizQuestions(models.Model):
 
 # Add Quiz to Course
 class CourseQuiz(models.Model):
+    teacher = models.ForeignKey(Teacher, on_delete= models.CASCADE,null = True)
     course = models.ForeignKey(Course, on_delete= models.CASCADE,null = True)
     quiz = models.ForeignKey(Quiz, on_delete= models.CASCADE,null=True)
     add_time = models.DateTimeField(auto_now_add=True)
-
+    
     class Meta:
         verbose_name_plural = "13. Course Quiz"
 

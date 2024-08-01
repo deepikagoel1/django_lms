@@ -2,7 +2,7 @@ from django.shortcuts import render
 # Create your views here.
 # We are going to use class based Views as we have to do the multiple things and not Function Based Views
 from rest_framework.views import APIView
-from .serializers import TeacherSerializer, CategorySerializer, CourseSerializer, ChapterSerializer, StudentSerializer, StudentEnrolledCourseSerializer, StudentRatingCourseSerializer, TeacherDashboardSerializer, StudentFavCourseSerializer, StudentAssSerializer, StudentDashboardSerializer, NotificationSerializer, QuizSerializer
+from .serializers import TeacherSerializer, CategorySerializer, CourseSerializer, ChapterSerializer, StudentSerializer, StudentEnrolledCourseSerializer, StudentRatingCourseSerializer, TeacherDashboardSerializer, StudentFavCourseSerializer, StudentAssSerializer, StudentDashboardSerializer, NotificationSerializer, QuizSerializer, QuizQuestionsSerializer, CourseQuizSerializer
 from . import models
 from rest_framework.response import Response
 from rest_framework import generics, status
@@ -153,6 +153,13 @@ class CourseChapterList(generics.ListAPIView):
 class ChapterDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Chapter.objects.all()
     serializer_class = ChapterSerializer
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['chapter_duration'] = self.chapter_duration
+        print("context............")
+        print(context)
+        return context
 
 
 # TeacherCourseDetail will fetch the current Id data.
@@ -380,3 +387,42 @@ class TeacherQuizList(generics.ListCreateAPIView):
         teacher_id = self.kwargs['teacher_id']
         teacher = models.Teacher.objects.get(pk=teacher_id)
         return models.Quiz.objects.filter(teacher=teacher)
+
+class TeacherQuizDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.Quiz.objects.all()
+    serializer_class = QuizSerializer
+    # # permission_classes = [permissions.IsAuthenticated]
+    # def get_queryset(self):
+    #     teacher_id = self.kwargs['teacher_id']
+    #     teacher = models.Teacher.objects.get(pk=teacher_id)
+    #     return models.Course.objects.filter(teacher=teacher)
+
+class QuizDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.Quiz.objects.all()
+    serializer_class = QuizSerializer
+
+class QuizQuestionsList(generics.ListCreateAPIView):
+    queryset = models.Quiz.objects.all()
+    serializer_class = QuizQuestionsSerializer
+    # permission_classes = [permissions.IsAuthenticated]
+    def get_queryset(self):
+        quiz_id = self.kwargs['quiz_id']
+        quiz = models.Quiz.objects.get(pk=quiz_id)
+        return models.QuizQuestions.objects.filter(quiz=quiz) 
+
+class QuestionsDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.QuizQuestions.objects.all()
+    serializer_class = QuizQuestionsSerializer
+
+class CourseQuizList(generics.ListCreateAPIView):
+    queryset = models.CourseQuiz.objects.all()
+    serializer_class = CourseQuizSerializer
+
+def fetch_quiz_assign_status(request, quiz_id, course_id):
+    quiz = models.Quiz.objects.filter(id = quiz_id).first()
+    course = models.Course.objects.filter(id = course_id).first()
+    assignStatus = models.CourseQuiz.objects.filter(course = course, quiz = quiz).count()
+    if assignStatus:
+        return JsonResponse({'bool': True})
+    else:
+        return JsonResponse({'bool': False})

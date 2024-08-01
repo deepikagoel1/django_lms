@@ -149,8 +149,9 @@ catch(error){
                 type: 'success',
                 position: 'top-right'
               });
-              
+              // setEnrollState('success');
               window.location.reload()
+              
             }
           });
              
@@ -367,7 +368,7 @@ catch(error){
             </p>
             <p className="card-text fw-bold">
               Total Students Enrolled: &nbsp;
-                      {courseData.total_enrolled_students} 
+                      {courseData.total_enrolled_students} Student(s)
                     
             </p>
             <p className="card-text fw-bold">

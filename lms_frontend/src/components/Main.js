@@ -47,6 +47,11 @@ import AddAssignment from './teacher/AddAssignment';
 import ViewAssignment from './teacher/ViewAssignment';
 import AddQuiz from './teacher/AddQuiz';
 import AllQuiz from './teacher/AllQuiz';
+import EditQuiz from './teacher/EditQuiz';
+import QuizQuestions from './teacher/QuizQuestions';
+import AddQuizQuestions from './teacher/AddQuizQuestions';
+import AssignQuiz from './teacher/AssignQuiz';
+import EditQuestion from './teacher/EditQuestion';
 
 
 function Main() {
@@ -97,7 +102,13 @@ function Main() {
         <Route path = "/teacher-add-assignment/:student_id/:teacher_id/" element = {<AddAssignment />} />
         <Route path = "/teacher-view-assignment/:student_id/:teacher_id/" element = {<ViewAssignment />} />
         <Route path = "/teacher-add-quiz" element = {<AddQuiz />} />
-        <Route path = "/teacher-all-quiz" element = {<AllQuiz />} />
+        <Route path = "/teacher-all-quiz/" element = {<AllQuiz />} />
+        <Route path = "/teacher-edit-quiz/:quiz_id" element = {<EditQuiz />} />
+        <Route path = "/teacher-quiz-questions/:quiz_id" element = {<QuizQuestions />} />
+        <Route path = "/teacher-add-questions/:quiz_id" element = {<AddQuizQuestions />} />
+        <Route path = "/teacher-assign-quiz/:course_id" element = {<AssignQuiz />} />
+        <Route path = "/teacher-edit-question/:question_id" element = {<EditQuestion />} />
+
       </Switch>
       <Footer />
       

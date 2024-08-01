@@ -58,9 +58,15 @@ urlpatterns = [
     path('teacher/fetch-all-notifications/<int:teacher_id>/', views.NotificationList.as_view()),
 
     # Quiz Start
+
     path('quiz/', views.QuizList.as_view()),
     path('teacher-quiz/<int:teacher_id>/', views.TeacherQuizList.as_view()),
-
+    path('teacher-quiz-detail/<int:pk>/', views.TeacherQuizDetail.as_view()),
+    path('quiz/<int:pk>', views.QuizDetailView.as_view()),
+    path('quiz-questions/<int:quiz_id>', views.QuizQuestionsList.as_view()),
+    path('quiz-assign-course/', views.CourseQuizList.as_view()),
+    path('fetch-quiz-assign-status/<int:quiz_id>/<int:course_id>', views.fetch_quiz_assign_status),
+    path('questions/<int:pk>', views.QuestionsDetailView.as_view()),
     # Quiz End
 
     ]

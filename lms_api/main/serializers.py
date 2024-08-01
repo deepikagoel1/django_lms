@@ -133,7 +133,7 @@ class NotificationSerializer(serializers.ModelSerializer):
 class QuizSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Quiz
-        fields = ['id', 'teacher', 'title', 'detail', 'add_time']
+        fields = ['id', 'teacher', 'title', 'detail', 'assign_status', 'add_time']
         # depth = 1 # It will fetch the Category related data and the teacher related data. Fetching the Level-1 details
         # But if we want to capture further more details related to the categories as well then we can define the depth value as 2 
         # or whatsoever since in our models.py file this Serializer is linked with category so we can define it as level 2 
@@ -146,3 +146,27 @@ class QuizSerializer(serializers.ModelSerializer):
         self.Meta.depth = 0
         if request and request.method == 'GET':
             self.Meta.depth = 1
+
+
+class QuizQuestionsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.QuizQuestions
+        fields = ['id', 'quiz', 'questions', 'ans1', 'ans2', 'ans3', 'ans3', 'right_ans']
+    def __init__(self, *args, **kwargs):
+        super(QuizQuestionsSerializer, self).__init__(*args, **kwargs)
+        request = self.context.get('request')
+        self.Meta.depth = 0
+        if request and request.method == 'GET':
+            self.Meta.depth = 1
+
+class CourseQuizSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.CourseQuiz
+        fields = ['id', 'teacher', 'course', 'quiz', 'add_time']
+        # depth = 1
+    def __init__(self, *args, **kwargs):
+        super(CourseQuizSerializer, self).__init__(*args, **kwargs)
+        request = self.context.get('request')
+        self.Meta.depth = 0
+        if request and request.method == 'GET':
+            self.Meta.depth = 2
